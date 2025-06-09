@@ -90,7 +90,7 @@ jobs:
           sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-${{ inputs.gcc-major-version }} 100 --slave /usr/bin/g++ g++ /usr/bin/g++-${{ inputs.gcc-major-version }}
 
       - name: 'Configure'
-        run: >
+        run: |
           bash configure \
           --with-conf-name=linux-arm32-hardfloat \
           --openjdk-target=arm-linux-gnueabihf \
