@@ -84,7 +84,7 @@ jobs:
           echo 'deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports jammy-updates main restricted universe multiverse' | sudo tee -a /etc/apt/sources.list.d/armhf.list
           echo 'deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports jammy-backports main restricted universe multiverse' | sudo tee -a /etc/apt/sources.list.d/armhf.list
 
-          sudo mv /etc/apt/apt-mirrors.txt /etc/apt/apt-mirrors.txt.disabled
+          sudo cat /etc/apt/apt-mirrors.txt
 
           sudo dpkg --add-architecture armhf
           
