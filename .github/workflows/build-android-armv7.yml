@@ -23,17 +23,11 @@
 # questions.
 #
 
-name: 'Build (macos)'
+name: 'Build (android armv7)'
 
 on:
   workflow_call:
     inputs:
-      platform:
-        required: true
-        type: string
-      runs-on:
-        required: true
-        type: string
       extra-conf-options:
         required: false
         type: string
@@ -45,8 +39,15 @@ on:
         required: false
         type: string
         default: '[ "debug", "release" ]'
-      xcode-toolset-version:
+      gcc-major-version:
         required: true
+        type: string
+      gcc-package-suffix:
+        required: false
+        type: string
+        default: ''
+      apt-extra-packages:
+        required: false
         type: string
       configure-arguments:
         required: false
@@ -56,9 +57,9 @@ on:
         type: string
 
 jobs:
-  build-macos:
+  build-android-armv7:
     name: build
-    runs-on: ${{ inputs.runs-on }}
+    runs-on: ubuntu-22.04
 
     strategy:
       fail-fast: false
@@ -73,54 +74,44 @@ jobs:
       - name: 'Checkout the JDK source'
         uses: actions/checkout@v4
 
-      - name: 'Get the BootJDK'
-        id: bootjdk
-        uses: ./.github/actions/get-bootjdk
-        with:
-          platform: ${{ inputs.platform }}
-
-      - name: 'Get JTReg'
-        id: jtreg
-        uses: ./.github/actions/get-jtreg
-
-      - name: 'Get GTest'
-        id: gtest
-        uses: ./.github/actions/get-gtest
-
+      # Upgrading apt to solve libc6 installation bugs, see JDK-8260460.
       - name: 'Install toolchain and dependencies'
         run: |
-          # Run Homebrew installation and xcode-select
-          brew install autoconf make
-          sudo xcode-select --switch /Applications/Xcode_${{ inputs.xcode-toolset-version }}.app/Contents/Developer
-          # This will make GNU make available as 'make' and not only as 'gmake'
-          echo '/usr/local/opt/make/libexec/gnubin' >> $GITHUB_PATH
+          # Install dependencies using apt-get
+          
+          sudo dpkg --add-architecture armhf
+          
+          sudo apt-get update
+          sudo apt-get install --only-upgrade apt
+          sudo apt-get install gcc-${{ inputs.gcc-major-version }}${{ inputs.gcc-package-suffix }} g++-${{ inputs.gcc-major-version }}${{ inputs.gcc-package-suffix }} libxrandr-dev${{ steps.arch.outputs.suffix }} libxtst-dev${{ steps.arch.outputs.suffix }} libcups2-dev${{ steps.arch.outputs.suffix }} libasound2-dev${{ steps.arch.outputs.suffix }} ${{ inputs.apt-extra-packages }}
+          sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-${{ inputs.gcc-major-version }} 100 --slave /usr/bin/g++ g++ /usr/bin/g++-${{ inputs.gcc-major-version }}
 
       - name: 'Configure'
         run: >
-          bash configure
-          --with-conf-name=${{ inputs.platform }}
-          ${{ matrix.flags }}
-          --with-version-opt=${GITHUB_ACTOR}-${GITHUB_SHA}
-          --with-boot-jdk=${{ steps.bootjdk.outputs.path }}
-          --with-jtreg=${{ steps.jtreg.outputs.path }}
-          --with-gtest=${{ steps.gtest.outputs.path }}
-          --with-zlib=system
-          --with-jmod-compress=zip-1
-          ${{ inputs.extra-conf-options }} ${{ inputs.configure-arguments }} || (
-          echo "Dumping config.log:" &&
-          cat config.log &&
+          bash configure \
+          --with-conf-name=linux-arm32-hardfloat \
+          --openjdk-target=arm-linux-gnueabihf \
+          --with-zlib=system \
+          --with-jmod-compress=zip-1 \
+          ${{ inputs.extra-conf-options }} ${{ inputs.configure-arguments }} || ( \
+          echo "Dumping config.log:" && \
+          cat config.log && \
           exit 1)
 
       - name: 'Build'
         id: build
         uses: ./.github/actions/do-build
+        env:
+          # Only build static-libs-bundles for release builds.
+          # For debug builds, building static-libs often exceeds disk space.
+          STATIC_LIBS: ${{ matrix.debug-level == 'release' && 'static-libs-bundles' }}
         with:
-          make-target: '${{ inputs.make-target }} ${{ inputs.make-arguments }}'
-          platform: ${{ inputs.platform }}
+          make-target: '${{ inputs.make-target }} ${STATIC_LIBS} ${{ inputs.make-arguments }}'
+          platform: armhf
           debug-suffix: '${{ matrix.suffix }}'
 
       - name: 'Upload bundles'
         uses: ./.github/actions/upload-bundles
         with:
-          platform: ${{ inputs.platform }}
+          platform: armhf
           debug-suffix: '${{ matrix.suffix }}'
