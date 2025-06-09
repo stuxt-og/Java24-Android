@@ -81,6 +81,11 @@ jobs:
           
           sudo dpkg --add-architecture armhf
           
+          echo "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports jammy main restricted universe multiverse
+deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports jammy-security main restricted universe multiverse
+deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports jammy-updates main restricted universe multiverse
+deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports jammy-backports main restricted universe multiverse" | sudo tee /etc/apt/sources.list.d/armhf.list > /dev/null
+
           sudo apt-get update
           sudo apt-get install --only-upgrade apt
           sudo apt-get install gcc-${{ inputs.gcc-major-version }}${{ inputs.gcc-package-suffix }} g++-${{ inputs.gcc-major-version }}${{ inputs.gcc-package-suffix }} libxrandr-dev-armhf libxtst-dev-armhf libcups2-dev-armhf libasound2-dev-armhf ${{ inputs.apt-extra-packages }}
