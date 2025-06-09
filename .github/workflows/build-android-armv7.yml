@@ -100,7 +100,6 @@ jobs:
         run: |
           bash configure \
           --with-conf-name=linux-arm32-hardfloat \
-          --with-x=no \
           --openjdk-target=arm-linux-gnueabihf \
           --with-boot-jdk=/opt/jdk-24 \
           --with-zlib=system \
