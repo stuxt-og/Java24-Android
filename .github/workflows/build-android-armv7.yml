@@ -78,9 +78,12 @@ jobs:
       - name: 'Install toolchain and dependencies'
         run: |
           # Install dependencies using apt-get
-
+          
           echo 'deb [arch=armhf] http://ports.ubuntu.com/ub
-untu-ports jammy main restricted universe multiverse'        | sudo tee /etc/apt/sources.list.d/armhf.list                      echo 'deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports jammy-security main restricted universe multiverse'  | sudo tee -a /etc/apt/sources.list.d/armhf.list                echo 'deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports jammy-updates main restricted universe multiverse'   | sudo tee -a /etc/apt/sources.list.d/armhf.list                echo 'deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports jammy-backports main restricted universe multiverse' | sudo tee -a /etc/apt/sources.list.d/armhf.list
+untu-ports jammy main restricted universe multiverse' | sudo tee /etc/apt/sources.list.d/armhf.list
+          echo 'deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports jammy-security main restricted universe multiverse' | sudo tee -a /etc/apt/sources.list.d/armhf.list
+          echo 'deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports jammy-updates main restricted universe multiverse' | sudo tee -a /etc/apt/sources.list.d/armhf.list
+          echo 'deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports jammy-backports main restricted universe multiverse' | sudo tee -a /etc/apt/sources.list.d/armhf.list
 
           sudo mv /etc/apt/apt-mirrors.txt /etc/apt/apt-mirrors.txt.disabled
 
