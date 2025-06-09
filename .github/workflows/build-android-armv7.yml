@@ -79,12 +79,7 @@ jobs:
         run: |
           # Install dependencies using apt-get
           
-          echo 'deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports jammy main restricted universe multiverse' | sudo tee /etc/apt/sources.list.d/armhf.list
-          echo 'deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports jammy-security main restricted universe multiverse' | sudo tee -a /etc/apt/sources.list.d/armhf.list
-          echo 'deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports jammy-updates main restricted universe multiverse' | sudo tee -a /etc/apt/sources.list.d/armhf.list
-          echo 'deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports jammy-backports main restricted universe multiverse' | sudo tee -a /etc/apt/sources.list.d/armhf.list
-
-          sudo cat /etc/apt/apt-mirrors.txt
+          echo "http://ports.ubuntu.com/ubuntu-ports/	priority:10" | sudo tee -a /etc/apt/apt-mirrors.txt
 
           sudo dpkg --add-architecture armhf
           
