@@ -27,6 +27,10 @@ typedef void (*upcall_func)(void);
 
 JNIEXPORT void JNICALL
 Java_LingeredAppWithFFMUpcall_callJNI(JNIEnv *env, jclass cls, jlong upcallAddr) {
+#ifdef _LP64
+  upcall_func upcall = (upcall_func)upcallAddr;
+#else
   upcall_func upcall = upcall_from_jlong(upcallAddr);
+#endif
   upcall();
-}
+} 

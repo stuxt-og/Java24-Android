@@ -2008,13 +2008,17 @@ JNI_OnUnload(JavaVM *vm, void *reserved);
 
 typedef void (*upcall_func)(void);
 
+#ifdef _LP64
+typedef unsigned long long uintptr_t;
+
 upcall_func upcall_from_jlong(jlong upcallAddr) {
-    uint32_t low = (uint32_t)(upcallAddr & 0xFFFFFFFF);
-    uint32_t high = (uint32_t)((upcallAddr >> 32) & 0xFFFFFFFF);
+    unsigned int low = (unsigned int)(upcallAddr & 0xFFFFFFFF);
+    unsigned int high = (unsigned int)((upcallAddr >> 32) & 0xFFFFFFFF);
 
     (void)high;
     return (upcall_func)(uintptr_t)low;
-}	
+}
+#endif
 
 #ifdef __cplusplus
 } /* extern "C" */
