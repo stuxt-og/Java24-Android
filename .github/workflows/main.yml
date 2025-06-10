@@ -23,7 +23,7 @@
 # questions.
 #
 
-name: 'OpenJDK GHA Sanity Checks'
+name: 'OpenJDK build'
 
 on:
   push:

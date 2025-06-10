@@ -102,6 +102,8 @@ jobs:
           --with-conf-name=linux-arm32-hardfloat \
           --openjdk-target=arm-linux-gnueabihf \
           --with-boot-jdk=/opt/jdk-24 \
+          --with-target-bits=32 \
+          --without-x \ 
           --with-zlib=system \
           --with-jmod-compress=zip-1 \
           ${{ inputs.extra-conf-options }} ${{ inputs.configure-arguments }} || ( \
