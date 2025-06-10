@@ -26,7 +26,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#ifndef _LP32
+#ifdef _LP32
 JNIEXPORT void JNICALL
 Java_NoClassDefFoundErrorTest_callDefineClass(JNIEnv *env, jclass klass, jstring className) {
     const char *c_name = (*env)->GetStringUTFChars(env, className, NULL);
@@ -70,7 +70,7 @@ Java_NoClassDefFoundErrorTest_tryCallDefineClass(JNIEnv *env, jclass klass) {
 
 JNIEXPORT jboolean JNICALL
 Java_NoClassDefFoundErrorTest_tryCallFindClass(JNIEnv *env, jclass klass) {
-#ifndef _LP64
+#ifdef _LP64
     char* c_name = giant_string();
     if (c_name != NULL) {
         jclass cls = (*env)->FindClass(env, c_name);
