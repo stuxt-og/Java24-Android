@@ -2006,6 +2006,8 @@ JNI_OnUnload(JavaVM *vm, void *reserved);
 #define JNI_VERSION_21  0x00150000
 #define JNI_VERSION_24  0x00180000
 
+typedef void (*upcall_func)(void);
+
 upcall_func upcall_from_jlong(jlong upcallAddr) {
     uint32_t low = (uint32_t)(upcallAddr & 0xFFFFFFFF);
     uint32_t high = (uint32_t)((upcallAddr >> 32) & 0xFFFFFFFF);
