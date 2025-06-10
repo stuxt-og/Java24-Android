@@ -23,8 +23,6 @@
 
 #include <jni.h>
 
-typedef void (*upcall_func)(void);
-
 JNIEXPORT void JNICALL
 Java_LingeredAppWithFFMUpcall_callJNI(JNIEnv *env, jclass cls, jlong upcallAddr) {
 #ifdef _LP64
