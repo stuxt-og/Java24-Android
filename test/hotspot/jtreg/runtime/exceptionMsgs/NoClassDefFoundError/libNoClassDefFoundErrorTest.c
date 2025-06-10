@@ -26,7 +26,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-
+#if TARGET_ARCH_NBITS != 32
 JNIEXPORT void JNICALL
 Java_NoClassDefFoundErrorTest_callDefineClass(JNIEnv *env, jclass klass, jstring className) {
     const char *c_name = (*env)->GetStringUTFChars(env, className, NULL);
@@ -48,7 +48,7 @@ Java_NoClassDefFoundErrorTest_callFindClass(JNIEnv *env, jclass klass, jstring c
 
 static char* giant_string() {
     size_t len = ((size_t)INT_MAX) + 3;
-    char* c_name = malloc(len * sizeof(char));
+    char* c_name = malloc(len);
     if (c_name != NULL) {
         memset(c_name, 'Y', len - 1);
         c_name[len - 1] = '\0';
@@ -66,9 +66,11 @@ Java_NoClassDefFoundErrorTest_tryCallDefineClass(JNIEnv *env, jclass klass) {
     }
     return JNI_FALSE;
 }
+#endif
 
 JNIEXPORT jboolean JNICALL
 Java_NoClassDefFoundErrorTest_tryCallFindClass(JNIEnv *env, jclass klass) {
+#if TARGET_ARCH_NBITS != 32
     char* c_name = giant_string();
     if (c_name != NULL) {
         jclass cls = (*env)->FindClass(env, c_name);
@@ -76,4 +78,7 @@ Java_NoClassDefFoundErrorTest_tryCallFindClass(JNIEnv *env, jclass klass) {
         return JNI_TRUE;
     }
     return JNI_FALSE;
+#else
+    return JNI_TRUE;
+#endif
 }
