@@ -108,6 +108,14 @@ static jint CurrentVersion = JNI_VERSION_24;
 extern LONG WINAPI topLevelExceptionFilter(_EXCEPTION_POINTERS* );
 #endif
 
+#ifndef _LP64
+upcall_func upcall_from_jlong(jlong upcallAddr) {
+    unsigned int low = (unsigned int)(upcallAddr & 0xFFFFFFFF);
+    unsigned int high = (unsigned int)((upcallAddr >> 32) &
+ 0xFFFFFFFF);                                                                                                             (void)high;
+    return (upcall_func)(unsigned long long)low;           }
+#endif
+
 // The DT_RETURN_MARK macros create a scoped object to fire the dtrace
 // '-return' probe regardless of the return path is taken out of the function.
 // Methods that have multiple return paths use this to avoid having to
