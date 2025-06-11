@@ -31,7 +31,7 @@ upcall_func upcall_from_jlong(jlong upcallAddr) {
     unsigned int high = (unsigned int)((upcallAddr >> 32) & 0xFFFFFFFF);
 
     (void)high;
-    return (upcall_func)(unsigned long long)low;
+    return (upcall_func)low;
 }
 #endif
 
