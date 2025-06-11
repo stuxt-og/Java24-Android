@@ -66,6 +66,8 @@ define SetupBundleFileBody
 
   ifneq ($$(filter %.tar.gz, $$($1_BUNDLE_NAME)), )
     $1_TYPE := tar.gz
+  else ifneq ($$(filtee %.tar.xz, $$($1_BUNDLE_NAME)), )
+    $1_TYPE := tar.xz
   else ifneq ($$(filter %.zip, $$($1_BUNDLE_NAME)), )
     $1_TYPE := zip
   else
@@ -118,6 +120,33 @@ define SetupBundleFileBody
 	          $$(if $$($1_SUBDIR), --transform 's|^|$$($1_SUBDIR)/|S') \
 	          $(TAR_IGNORE_EXIT_VALUE) ) \
 	      | $(GZIP) > $$@
+	else ifeq ($$($1_SUBDIR)-$$($1_TYPE)-$$($1_UNZIP_DEBUGINFO)-$$(words $$($1_BASE_DIRS)), \
+            .-tar.xz-false-1)
+          # Same as above but for tar.xz
+	  $(CD) $$($1_BASE_DIRS) \
+	      && ( $(TAR) cf - \
+	          -$(TAR_INCLUDE_PARAM) $$($1_$$($1_BASE_DIRS)_LIST_FILE) \
+	          $(TAR_IGNORE_EXIT_VALUE) ) \
+	      | $(XZ) > $$@
+        else ifeq ($$($1_TYPE)-$(TAR_SUPPORTS_TRANSFORM)-$$($1_UNZIP_DEBUGINFO)-$$(words $$($1_BASE_DIRS)), \
+            tar.gz-true-false-1)
+          # If only one BASE_DIR, but with a SUBDIR set, tar.gz can use the
+          # transform option to create bundle directly from the BASE_DIR.
+	  $(CD) $$($1_BASE_DIRS) \
+	      && ( $(TAR) cf - \
+	          -$(TAR_INCLUDE_PARAM) $$($1_$$($1_BASE_DIRS)_LIST_FILE) \
+	          $$(if $$($1_SUBDIR), --transform 's|^|$$($1_SUBDIR)/|S') \
+	          $(TAR_IGNORE_EXIT_VALUE) ) \
+	      | $(GZIP) > $$@
+        else ifeq ($$($1_TYPE)-$(TAR_SUPPORTS_TRANSFORM)-$$($1_UNZIP_DEBUGINFO)-$$(words $$($1_BASE_DIRS)), \
+            tar.xz-true-false-1)
+          # Same as above but for tar.xz
+	  $(CD) $$($1_BASE_DIRS) \
+	      && ( $(TAR) cf - \
+	          -$(TAR_INCLUDE_PARAM) $$($1_$$($1_BASE_DIRS)_LIST_FILE) \
+	          $$(if $$($1_SUBDIR), --transform 's|^|$$($1_SUBDIR)/|S') \
+	          $(TAR_IGNORE_EXIT_VALUE) ) \
+	      | $(XZ) > $$@
         else
           # In all other cases, need to copy all files into a temporary location
           # before creation bundle.
