@@ -28,7 +28,7 @@
 ################################################################################
 AC_DEFUN_ONCE([LIB_SETUP_X11],
 [
-  if true; then # test "x$NEEDS_LIB_X11" = xfalse; then
+  if test "x$NEEDS_LIB_X11" = xfalse; then
     if (test "x${with_x}" != x && test "x${with_x}" != xno); then
       AC_MSG_WARN([X11 is not used, so --with-x is ignored])
     fi
