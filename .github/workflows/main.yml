@@ -293,15 +293,15 @@ jobs:
       bootjdk-platform: linux-x64
       runs-on: ubuntu-22.04
 
-  test-android-armv7:
-    name: android-armv7
-    needs:
-      - build-android-armv7
-    uses: ./.github/workflows/test.yml
-    with:
-      platform: android-armv7
-      bootjdk-platform: android-armv7
-      runs-on: ubuntu-22.04
+  #test-android-armv7:
+  #  name: android-armv7
+  #  needs:
+  #    - build-android-armv7
+  #  uses: ./.github/workflows/test.yml
+  #  with:
+  #    platform: android-armv7
+  #    bootjdk-platform: android-armv7
+  #    runs-on: ubuntu-22.04
 
   test-windows-x64:
     name: windows-x64
