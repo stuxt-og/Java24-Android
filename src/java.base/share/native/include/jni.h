@@ -2004,13 +2004,7 @@ JNI_OnUnload(JavaVM *vm, void *reserved);
 #define JNI_VERSION_19  0x00130000
 #define JNI_VERSION_20  0x00140000
 #define JNI_VERSION_21  0x00150000
-#define JNI_VERSION_24  0x00180000
-
-typedef void (*upcall_func)(void);
-
-#ifndef _LP64
-upcall_func upcall_from_jlong(jlong upcallAddr);
-#endif
+#define JNI_VERSION_24  0x00180000	
 
 #ifdef __cplusplus
 } /* extern "C" */

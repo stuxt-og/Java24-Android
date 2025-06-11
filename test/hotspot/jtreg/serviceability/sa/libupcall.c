@@ -23,6 +23,18 @@
 
 #include <jni.h>
 
+#ifndef _LP64
+typedef void (*upcall_func)(void);
+
+upcall_func upcall_from_jlong(jlong upcallAddr) {
+    unsigned int low = (unsigned int)(upcallAddr & 0xFFFFFFFF);
+    unsigned int high = (unsigned int)((upcallAddr >> 32) & 0xFFFFFFFF);
+
+    (void)high;
+    return (upcall_func)(unsigned long long)low;
+}
+#endif
+
 JNIEXPORT void JNICALL
 Java_LingeredAppWithFFMUpcall_callJNI(JNIEnv *env, jclass cls, jlong upcallAddr) {
 #ifdef _LP64
