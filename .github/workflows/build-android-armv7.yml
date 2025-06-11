@@ -104,7 +104,7 @@ jobs:
           --with-boot-jdk=/opt/jdk-24 \
           --with-zlib=system \
           --with-jmod-compress=zip-1 \
-          --with-awt=xawt
+          --with-awt=xawt \
           ${{ inputs.extra-conf-options }} ${{ inputs.configure-arguments }} || ( \
           echo "Dumping config.log:" && \
           cat config.log && \
