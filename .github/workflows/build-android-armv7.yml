@@ -144,7 +144,7 @@ jobs:
           --with-zlib=system
           --enable-debug
           --disable-precompiled-headers
-          --openjdk-target=arm-linux-gnuabihf
+          --openjdk-target=arm-linux-gnueabihf
           --with-sysroot=sysroot
           --with-jmod-compress=zip-1
           CC=${{ matrix.gnu-arch }}-linux-gnu${{ matrix.gnu-abi}}-gcc-${{ inputs.gcc-major-version }}
