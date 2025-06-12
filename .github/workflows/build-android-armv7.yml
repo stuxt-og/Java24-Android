@@ -137,7 +137,6 @@ jobs:
         run: >
           bash configure
           --with-conf-name=linux-armhf
-          --with-target-bits=32
           --with-version-opt=${GITHUB_ACTOR}-${GITHUB_SHA}
           --with-boot-jdk=${{ steps.bootjdk.outputs.path }}
           --with-gtest=${{ steps.gtest.outputs.path }}
