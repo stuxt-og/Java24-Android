@@ -146,8 +146,8 @@ jobs:
           --openjdk-target=arm-linux-gnueabihf
           --with-sysroot=sysroot
           --with-jmod-compress=zip-1
-          CC=${{ matrix.gnu-arch }}-linux-gnu${{ matrix.gnu-abi}}-gcc-${{ inputs.gcc-major-version }}
-          CXX=${{ matrix.gnu-arch }}-linux-gnu${{ matrix.gnu-abi}}-g++-${{ inputs.gcc-major-version }}
+          CC=gcc-10-arm-linux-gnueabihf
+          CXX=g++-10-arm-linux-gnueabihf
           ${{ inputs.extra-conf-options }} ${{ inputs.configure-arguments }} || (
           echo "Dumping config.log:" &&
           cat config.log &&
