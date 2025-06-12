@@ -40,6 +40,10 @@ on:
       make-arguments:
         required: false
         type: string
+      debug-levels:
+        required: false
+        type: string
+        default: '[ "debug", "release" ]'
 
 jobs:
   build-cross-compile:
