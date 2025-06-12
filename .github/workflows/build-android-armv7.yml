@@ -166,4 +166,3 @@ jobs:
         uses: ./.github/actions/upload-bundles
         with:
           platform: linux-armhf
-          debug-suffix: debug
