@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2022, 2023, Oracle and/or its affiliates. All rights reserved.
+# Copyright (c) 2022, 2024, Oracle and/or its affiliates. All rights reserved.
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 #
 # This code is free software; you can redistribute it and/or modify it
@@ -23,15 +23,30 @@
 # questions.
 #
 
-name: 'Build (cross-compile)'
+name: 'Build (android armv7)'
 
 on:
   workflow_call:
     inputs:
+      extra-conf-options:
+        required: false
+        type: string
+      make-target:
+        required: false
+        type: string
+        default: 'product-bundles test-bundles'
+      debug-levels:
+        required: false
+        type: string
+        default: '[ "debug", "release" ]'
       gcc-major-version:
         required: true
         type: string
-      extra-conf-options:
+      gcc-package-suffix:
+        required: false
+        type: string
+        default: ''
+      apt-extra-packages:
         required: false
         type: string
       configure-arguments:
@@ -40,139 +55,74 @@ on:
       make-arguments:
         required: false
         type: string
-      debug-levels:
-        required: false
-        type: string
-        default: '[ "debug", "release" ]'
 
 jobs:
-  build-cross-compile:
+  build-android-armv7:
     name: build
     runs-on: ubuntu-22.04
 
     strategy:
       fail-fast: false
       matrix:
-        target-cpu:
-          - arm
         debug-level: ${{ fromJSON(inputs.debug-levels) }}
         include:
           - debug-level: debug
             flags: --with-debug-level=fastdebug
             suffix: -debug
-          - target-cpu: arm
-            gnu-arch: arm
-            debian-arch: armhf
-            debian-repository: https://httpredir.debian.org/debian/
-            debian-version: bullseye
-            tolerate-sysroot-errors: false
 
     steps:
       - name: 'Checkout the JDK source'
         uses: actions/checkout@v4
 
-      - name: 'Get the BootJDK'
-        id: bootjdk
-        uses: ./.github/actions/get-bootjdk
-        with:
-          platform: linux-x64
-
-      - name: 'Get GTest'
-        id: gtest
-        uses: ./.github/actions/get-gtest
-
-        # Upgrading apt to solve libc6 installation bugs, see JDK-8260460.
+      # Upgrading apt to solve libc6 installation bugs, see JDK-8260460.
       - name: 'Install toolchain and dependencies'
         run: |
           # Install dependencies using apt-get
+          
+          echo "http://ports.ubuntu.com/ubuntu-ports/	priority:10" | sudo tee -a /etc/apt/apt-mirrors.txt
+
+          sudo dpkg --add-architecture armhf
+          
           sudo apt-get update
+          
           sudo apt-get install --only-upgrade apt
-          sudo apt-get install \
-              gcc-10 \
-              g++-10 \
-              gcc-10-arm-linux-gnueabihf \
-              g++-10-arm-linux-gnueabihf \
-              libxrandr-dev libxtst-dev libcups2-dev libasound2-dev
+          sudo apt-get install gcc-${{ inputs.gcc-major-version }}${{ inputs.gcc-package-suffix }} g++-${{ inputs.gcc-major-version }}${{ inputs.gcc-package-suffix }} libxrandr-dev:armhf libxtst-dev:armhf libcups2-dev:armhf libasound2-dev:armhf ${{ inputs.apt-extra-packages }} gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf libfreetype6-dev:armhf
           sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-${{ inputs.gcc-major-version }} 100 --slave /usr/bin/g++ g++ /usr/bin/g++-${{ inputs.gcc-major-version }}
+          wget https://github.com/adoptium/temurin24-binaries/releases/download/jdk-24%2B36/OpenJDK24U-jdk_x64_linux_hotspot_24_36.tar.gz
+          tar -xvzf OpenJDK24U-jdk_x64_linux_hotspot_24_36.tar.gz
+          sudo mv jdk-24+36 /opt/jdk-24
+          sudo update-alternatives --install /usr/bin/java java /opt/jdk-24/bin/java 1
+          sudo update-alternatives --install /usr/bin/javac javac /opt/jdk-24/bin/javac 1
 
-      - name: 'Check cache for sysroot'
-        id: get-cached-sysroot
-        uses: actions/cache@v4
-        with:
-          path: sysroot
-          key: sysroot-${{ matrix.debian-arch }}-${{ hashFiles('./.github/workflows/build-cross-compile.yml') }}
-
-      - name: 'Install sysroot dependencies'
-        run: sudo apt-get install debootstrap qemu-user-static
-        if: steps.get-cached-sysroot.outputs.cache-hit != 'true'
-
-      - name: 'Create sysroot'
-        id: create-sysroot
-        run: >
-          sudo debootstrap
-          --no-merged-usr
-          --arch=${{ matrix.debian-arch }}
-          --verbose
-          --include=fakeroot,symlinks,build-essential,libx11-dev,libxext-dev,libxrender-dev,libxrandr-dev,libxtst-dev,libxt-dev,libcups2-dev,libfontconfig1-dev,libasound2-dev,libfreetype-dev,libpng-dev
-          --resolve-deps
-          --variant=minbase
-          ${{ matrix.debian-version }}
-          sysroot
-          ${{ matrix.debian-repository }}
-        continue-on-error: ${{ matrix.tolerate-sysroot-errors }}
-        if: steps.get-cached-sysroot.outputs.cache-hit != 'true'
-
-      - name: 'Prepare sysroot'
-        run: |
-          # Prepare sysroot and remove unused files to minimize cache
-          sudo chroot sysroot symlinks -cr .
-          sudo chown ${USER} -R sysroot
-          rm -rf sysroot/{dev,proc,run,sys,var}
-          rm -rf sysroot/usr/{sbin,bin,share}
-          rm -rf sysroot/usr/lib/{apt,gcc,udev,systemd}
-          rm -rf sysroot/usr/libexec/gcc
-          # /{bin,sbin,lib}/ are not symbolic links to /usr/{bin,sbin,lib}/ when debootstrap with --no-merged-usr
-          rm -rf sysroot/{sbin,bin}
-          rm -rf sysroot/lib/{udev,systemd}
-        if: steps.create-sysroot.outcome == 'success' && steps.get-cached-sysroot.outputs.cache-hit != 'true'
-
-      - name: 'Remove broken sysroot'
-        run: |
-          sudo rm -rf sysroot/
-        if: steps.create-sysroot.outcome != 'success' && steps.get-cached-sysroot.outputs.cache-hit != 'true'
+          export JAVA_HOME=/opt/jdk-24
 
       - name: 'Configure'
-        run: >
-          bash configure
-          --with-conf-name=linux-armhf
-          --with-version-opt=${GITHUB_ACTOR}-${GITHUB_SHA}
-          --with-boot-jdk=${{ steps.bootjdk.outputs.path }}
-          --with-gtest=${{ steps.gtest.outputs.path }}
-          --with-zlib=system
-          --enable-debug
-          --disable-precompiled-headers
-          --openjdk-target=arm-linux-gnueabihf
-          --with-sysroot=sysroot
-          --with-jmod-compress=zip-1
-          CC=arm-linux-gnueabihf-gcc-10
-          CXX=arm-linux-gnueabihf-g++-10
-          ${{ inputs.extra-conf-options }} ${{ inputs.configure-arguments }} || (
-          echo "Dumping config.log:" &&
-          cat config.log &&
+        run: |
+          bash configure \
+          --with-conf-name=linux-arm32-hardfloat \
+          --openjdk-target=arm-linux-gnueabihf \
+          --with-boot-jdk=/opt/jdk-24 \
+          --with-zlib=system \
+          --with-jmod-compress=zip-1 \
+          ${{ inputs.extra-conf-options }} ${{ inputs.configure-arguments }} || ( \
+          echo "Dumping config.log:" && \
+          cat config.log && \
           exit 1)
-        if: steps.create-sysroot.outcome == 'success' || steps.get-cached-sysroot.outputs.cache-hit == 'true'
 
       - name: 'Build'
         id: build
         uses: ./.github/actions/do-build
+        env:
+          # Only build static-libs-bundles for release builds.
+          # For debug builds, building static-libs often exceeds disk space.
+          STATIC_LIBS: ${{ matrix.debug-level == 'release' && 'static-libs-bundles' }}
         with:
-          make-target: 'hotspot ${{ inputs.make-arguments }}'
-          platform: linux-${{ matrix.target-cpu }}
+          make-target: 'COMPRESS_FORMAT=xz ${{ inputs.make-target }} ${STATIC_LIBS} ${{ inputs.make-arguments }}'
+          platform: armhf
           debug-suffix: '${{ matrix.suffix }}'
-        if: steps.create-sysroot.outcome == 'success' || steps.get-cached-sysroot.outputs.cache-hit == 'true'
 
       - name: 'Upload bundles'
         uses: ./.github/actions/upload-bundles
         with:
-          platform: linux-armhf
+          platform: armhf
           debug-suffix: '${{ matrix.suffix }}'
