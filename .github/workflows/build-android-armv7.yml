@@ -51,7 +51,11 @@ jobs:
       matrix:
         target-cpu:
           - arm
+        debug-level: ${{ fromJSON(inputs.debug-levels) }}
         include:
+          - debug-level: debug
+            flags: --with-debug-level=fastdebug
+            suffix: -debug
           - target-cpu: arm
             gnu-arch: arm
             debian-arch: armhf
