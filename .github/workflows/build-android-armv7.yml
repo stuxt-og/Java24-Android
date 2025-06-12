@@ -97,22 +97,23 @@ jobs:
           export JAVA_HOME=/opt/jdk-24
 
       - name: 'Configure'
-        run: >
-          bash configure
-     --with-conf-name=linux-arm32-hardfloat
-    --openjdk-target=arm-linux-gnueabihf
-    --with-boot-jdk=/opt/jdk-24
-    --with-zlib=system
-    --with-jmod-compress=zip-1
-    --with-version-opt=${GITHUB_ACTOR}-${GITHUB_SHA}
-    --with-gtest=${{ steps.gtest.outputs.path }}
-    --disable-precompiled-headers
-    CC=arm-linux-gnueabihf-gcc-10
-    CXX=arm-linux-gnueabihf-g++-10
-    ${{ inputs.extra-conf-options }} ${{ inputs.configure-arguments }} || (
-          echo "Dumping config.log:" &&
-          cat config.log &&
-          exit 1)
+      run: >
+        bash configure
+        --with-conf-name=linux-arm32-hardfloat
+        --openjdk-target=arm-linux-gnueabihf
+        --with-boot-jdk=/opt/jdk-24
+        --with-zlib=system
+        --with-jmod-compress=zip-1
+        --with-version-opt=${GITHUB_ACTOR}-${GITHUB_SHA}
+        --with-gtest=${{ steps.gtest.outputs.path }}
+        --disable-precompiled-headers
+        CC=arm-linux-gnueabihf-gcc-10
+        CXX=arm-linux-gnueabihf-g++-10
+        ${{ inputs.extra-conf-options }}
+        ${{ inputs.configure-arguments }} || (
+        echo "Dumping config.log:" &&
+        cat config.log &&
+        exit 1)
 
       - name: 'Build'
         id: build
