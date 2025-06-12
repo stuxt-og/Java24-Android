@@ -38,7 +38,7 @@ on:
       debug-levels:
         required: false
         type: string
-        default: '[ "debug" ]'
+        default: '[ "release" ]'
       gcc-major-version:
         required: true
         type: string
@@ -85,7 +85,7 @@ jobs:
         run: |
           # Install dependencies using apt-get
           
-          echo "http://ports.ubuntu.com/ubuntu-ports/	priority:10" | sudo tee -a /etc/apt/apt-mirrors.txt
+          echo "http://ports.ubuntu.com/ubuntu-ports/        priority:10" | sudo tee -a /etc/apt/apt-mirrors.txt
 
           sudo dpkg --add-architecture armhf
           
@@ -101,6 +101,12 @@ jobs:
           --with-conf-name=linux-arm32-hardfloat \
           --openjdk-target=arm-linux-gnueabihf \
           --with-boot-jdk=${{ steps.bootjdk.outputs.path }} \
+          --with-jvm-variants=server \
+          --enable-dtrace=no \
+          --with-debug-level=release \
+          --with-native-debug-symbols=none \
+          --with-version-pre="" \
+          --with-version-opt=release \
           --with-zlib=system \
           --with-jmod-compress=zip-1 \
           --with-version-opt=${GITHUB_ACTOR}-${GITHUB_SHA} \
