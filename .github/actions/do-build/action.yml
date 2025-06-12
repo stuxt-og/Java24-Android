@@ -44,7 +44,6 @@ runs:
       run: >
         make LOG=info ${{ inputs.make-target }}
         || bash ./.github/scripts/gen-build-failure-report.sh "$GITHUB_STEP_SUMMARY"
-        ls ./build/linux-armhf-server-release/images/jdk/
       shell: bash
 
     - name: 'Check for failure'
