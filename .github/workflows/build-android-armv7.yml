@@ -96,9 +96,9 @@ jobs:
 
           export JAVA_HOME=/opt/jdk-24
 
-      - name: 'Configure'
-      run: |
-        bash configure \
+       - name: 'Configure'
+       run: |
+         bash configure \
     --with-conf-name=linux-arm32-hardfloat \
     --openjdk-target=arm-linux-gnueabihf \
     --with-boot-jdk=/opt/jdk-24 \
