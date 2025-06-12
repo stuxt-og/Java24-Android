@@ -38,7 +38,7 @@ on:
       debug-levels:
         required: false
         type: string
-        default: '[ "debug", "release" ]'
+        default: '[ "debug" ]'
       gcc-major-version:
         required: true
         type: string
@@ -74,6 +74,12 @@ jobs:
       - name: 'Checkout the JDK source'
         uses: actions/checkout@v4
 
+      - name: 'Get the BootJDK'
+        id: bootjdk
+        uses: ./.github/actions/get-bootjdk
+        with:
+          platform: linux-x64
+
       # Upgrading apt to solve libc6 installation bugs, see JDK-8260460.
       - name: 'Install toolchain and dependencies'
         run: |
@@ -86,26 +92,20 @@ jobs:
           sudo apt-get update
           
           sudo apt-get install --only-upgrade apt
-          sudo apt-get install gcc-${{ inputs.gcc-major-version }}${{ inputs.gcc-package-suffix }} g++-${{ inputs.gcc-major-version }}${{ inputs.gcc-package-suffix }} libxrandr-dev:armhf libxtst-dev:armhf libcups2-dev:armhf libasound2-dev:armhf ${{ inputs.apt-extra-packages }} gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf libfreetype6-dev:armhf
-          sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-${{ inputs.gcc-major-version }} 100 --slave /usr/bin/g++ g++ /usr/bin/g++-${{ inputs.gcc-major-version }}
-          wget https://github.com/adoptium/temurin24-binaries/releases/download/jdk-24%2B36/OpenJDK24U-jdk_x64_linux_hotspot_24_36.tar.gz
-          tar -xvzf OpenJDK24U-jdk_x64_linux_hotspot_24_36.tar.gz
-          sudo mv jdk-24+36 /opt/jdk-24
-          sudo update-alternatives --install /usr/bin/java java /opt/jdk-24/bin/java 1
-          sudo update-alternatives --install /usr/bin/javac javac /opt/jdk-24/bin/javac 1
-
-          export JAVA_HOME=/opt/jdk-24
+          sudo apt-get install gcc-10 g++-10 gcc-10-arm-linux-gnueabihf g++-10-arm-linux-gnueabihf libxrandr-dev:armhf libxtst-dev:armhf libcups2-dev:armhf libasound2-dev:armhf ${{ inputs.apt-extra-packages }} gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf libfreetype6-dev:armhf
+          sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-10 100 --slave /usr/bin/g++ g++ /usr/bin/g++-10
 
       - name: 'Configure'
         run: |
           bash configure \
           --with-conf-name=linux-arm32-hardfloat \
           --openjdk-target=arm-linux-gnueabihf \
-          --with-boot-jdk=/opt/jdk-24 \
+          --with-boot-jdk=${{ steps.bootjdk.outputs.path }} \
           --with-zlib=system \
           --with-jmod-compress=zip-1 \
           --with-version-opt=${GITHUB_ACTOR}-${GITHUB_SHA} \
           --with-gtest=${{ steps.gtest.outputs.path }} \
+          --enable-debug
           --disable-precompiled-headers \
           CC=arm-linux-gnueabihf-gcc-10 \
           CXX=arm-linux-gnueabihf-g++-10 \
