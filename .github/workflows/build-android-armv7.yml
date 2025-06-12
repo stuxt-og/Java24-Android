@@ -103,6 +103,7 @@ jobs:
           --openjdk-target=arm-linux-gnueabihf \
           --with-boot-jdk=/opt/jdk-24 \
           --with-zlib=system \
+          --with-x \
           --with-jmod-compress=zip-1 \
           --disable-headless-only \
           ${{ inputs.extra-conf-options }} ${{ inputs.configure-arguments }} || ( \
