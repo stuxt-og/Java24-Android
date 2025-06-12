@@ -66,7 +66,7 @@ jobs:
       matrix:
         debug-level: ${{ fromJSON(inputs.debug-levels) }}
         include:
-          - debug-level: debug
+          - debug-level: release #debug
             flags: #--with-debug-level=fastdebug
             suffix: -release #debug
 
