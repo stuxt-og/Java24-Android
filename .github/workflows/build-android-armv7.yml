@@ -38,7 +38,7 @@ on:
       debug-levels:
         required: false
         type: string
-        default: '[ "release" ]'
+        default: '[ "debug" ]'
       gcc-major-version:
         required: true
         type: string
@@ -114,7 +114,6 @@ jobs:
           --with-version-opt=${GITHUB_ACTOR}-${GITHUB_SHA} \
           --with-gtest=${{ steps.gtest.outputs.path }} \
           --disable-precompiled-headers \
-          --enable-debug \
           CC=arm-linux-gnueabihf-gcc-10 \
           CXX=arm-linux-gnueabihf-g++-10 \
           ${{ inputs.extra-conf-options }} ${{ inputs.configure-arguments }} || ( \
