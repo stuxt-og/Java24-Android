@@ -34,7 +34,7 @@ on:
       make-target:
         required: false
         type: string
-        default: 'images product-bundles test-bundles'
+        default: 'product-bundles test-bundles'
       debug-levels:
         required: false
         type: string
@@ -67,7 +67,7 @@ jobs:
         debug-level: ${{ fromJSON(inputs.debug-levels) }}
         include:
           - debug-level: debug
-            flags: --with-debug-level=fastdebug --with-version-opt=debug # --with-native-debug-symbols=none
+            flags: --with-debug-level=fastdebug
             suffix: -debug
 
     steps:
@@ -84,16 +84,15 @@ jobs:
       - name: 'Install toolchain and dependencies'
         run: |
           # Install dependencies using apt-get
-          echo "http://ports.ubuntu.com/ubuntu-ports/" | sudo tee -a /etc/apt/apt-mirrors.txt
+          
+          echo "http://ports.ubuntu.com/ubuntu-ports/	priority:10" | sudo tee -a /etc/apt/apt-mirrors.txt
 
           sudo dpkg --add-architecture armhf
           
           sudo apt-get update
           
           sudo apt-get install --only-upgrade apt
-
           sudo apt-get install gcc-10 g++-10 gcc-10-arm-linux-gnueabihf g++-10-arm-linux-gnueabihf libxrandr-dev:armhf libxtst-dev:armhf libcups2-dev:armhf libasound2-dev:armhf ${{ inputs.apt-extra-packages }} gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf libfreetype6-dev:armhf
-
           sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-10 100 --slave /usr/bin/g++ g++ /usr/bin/g++-10
 
       - name: 'Configure'
@@ -102,11 +101,11 @@ jobs:
           --with-conf-name=linux-arm32-hardfloat \
           --openjdk-target=arm-linux-gnueabihf \
           --with-boot-jdk=${{ steps.bootjdk.outputs.path }} \
-          --with-jvm-variants=server \
-          --enable-headless-only \
           --with-zlib=system \
           --with-jmod-compress=zip-1 \
+          --with-version-opt=${GITHUB_ACTOR}-${GITHUB_SHA} \
           --with-gtest=${{ steps.gtest.outputs.path }} \
+          --enable-debug \
           --disable-precompiled-headers \
           CC=arm-linux-gnueabihf-gcc-10 \
           CXX=arm-linux-gnueabihf-g++-10 \
