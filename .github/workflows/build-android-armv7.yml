@@ -23,7 +23,7 @@
 # questions.
 #
 
-name: 'Build (android armv7)
+name: 'Build (android armv7)'
 
 on:
   workflow_call:
