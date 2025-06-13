@@ -84,6 +84,7 @@ jobs:
       - name: 'Install toolchain and dependencies'
         run: |
           # Install dependencies using apt-get
+          cat /etc/apt/apt-mirrors.txt
           echo "https://launchpad.net/ubuntu/noble/armhf/        priority:10" | sudo tee -a /etc/apt/apt-mirrors.txt
 
           sudo dpkg --add-architecture armhf
