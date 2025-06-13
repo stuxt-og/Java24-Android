@@ -106,6 +106,7 @@ jobs:
           --enable-dtrace=no \
           --with-debug-level=release \
           --with-native-debug-symbols=none \
+          --enable-headless-only \
           --with-version-pre="" \
           --with-version-opt=release \
           --with-zlib=system \
@@ -133,9 +134,9 @@ jobs:
           debug-suffix: '${{ matrix.suffix }}'
 
       - name: 'List contents of build directory'
-      run: |
-        ls -R build || echo "No build dir"
-        ls -R build/linux-arm32-hardfloat || echo "No output for linux-arm32-hardfloat"
+        run: |
+          ls -R build || echo "No build dir"
+          ls -R build/linux-arm32-hardfloat || echo "No output for linux-arm32-hardfloat"
 
       - name: 'Upload bundles'
         uses: ./.github/actions/upload-bundles
