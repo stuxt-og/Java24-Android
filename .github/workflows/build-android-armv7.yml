@@ -66,9 +66,9 @@ jobs:
       matrix:
         debug-level: ${{ fromJSON(inputs.debug-levels) }}
         include:
-          - debug-level: release #debug
-            flags: #--with-debug-level=fastdebug
-            suffix: -release #debug
+          - debug-level: debug
+            flags: --with-debug-level=fastdebug
+            suffix: -debug
 
     steps:
       - name: 'Checkout the JDK source'
@@ -113,7 +113,8 @@ jobs:
           --with-jmod-compress=zip-1 \
           --with-version-opt=${GITHUB_ACTOR}-${GITHUB_SHA} \
           --with-gtest=${{ steps.gtest.outputs.path }} \
-          --disable-precompiled-headers \ #--enable-debug \
+          --disable-precompiled-headers \
+          --enable-debug \
           CC=arm-linux-gnueabihf-gcc-10 \
           CXX=arm-linux-gnueabihf-g++-10 \
           ${{ inputs.extra-conf-options }} ${{ inputs.configure-arguments }} || ( \
