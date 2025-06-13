@@ -105,6 +105,7 @@ jobs:
           --with-jmod-compress=zip-1 \
           --with-version-opt=${GITHUB_ACTOR}-${GITHUB_SHA} \
           --with-gtest=${{ steps.gtest.outputs.path }} \
+          --enable-debug \
           --disable-precompiled-headers \
           CC=arm-linux-gnueabihf-gcc-10 \
           CXX=arm-linux-gnueabihf-g++-10 \
