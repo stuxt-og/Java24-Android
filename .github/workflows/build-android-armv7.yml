@@ -84,7 +84,7 @@ jobs:
       - name: 'Install toolchain and dependencies'
         run: |
           # Install dependencies using apt-get
-          echo "http://ports.ubuntu.com/ubuntu-ports/        priority:4" | sudo tee -a /etc/apt/apt-mirrors.txt
+          echo "http://ports.ubuntu.com/ubuntu-ports/" | sudo tee -a /etc/apt/apt-mirrors.txt
 
           sudo dpkg --add-architecture armhf
           
