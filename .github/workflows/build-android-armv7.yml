@@ -23,7 +23,7 @@
 # questions.
 #
 
-name: 'Build (android armv7)'
+name: 'Build (android armv7)
 
 on:
   workflow_call:
@@ -38,7 +38,7 @@ on:
       debug-levels:
         required: false
         type: string
-        default: '[ "release" ]'
+        default: '[ "debug" ]'
       gcc-major-version:
         required: true
         type: string
@@ -66,9 +66,9 @@ jobs:
       matrix:
         debug-level: ${{ fromJSON(inputs.debug-levels) }}
         include:
-          - debug-level: release
-            flags: --with-debug-level=release --with-native-debug-symbols=none 
-            suffix: -release
+          - debug-level: debug
+            flags: --with-debug-level=fastdebug
+            suffix: -debug
 
     steps:
       - name: 'Checkout the JDK source'
@@ -104,11 +104,8 @@ jobs:
           --with-zlib=system \
           --with-jmod-compress=zip-1 \
           --with-version-opt=${GITHUB_ACTOR}-${GITHUB_SHA} \
-          --enable-headless-only \
-          --enable-dtrace=no \
-          --with-jvm-features= \
-          --with-jvm-variants=server \
           --with-gtest=${{ steps.gtest.outputs.path }} \
+          --enabl-headless-only \
           --disable-precompiled-headers \
           CC=arm-linux-gnueabihf-gcc-10 \
           CXX=arm-linux-gnueabihf-g++-10 \
