@@ -132,6 +132,11 @@ jobs:
           platform: armhf
           debug-suffix: '${{ matrix.suffix }}'
 
+      - name: 'List contents of build directory'
+      run: |
+        ls -R build || echo "No build dir"
+        ls -R build/linux-arm32-hardfloat || echo "No output for linux-arm32-hardfloat"
+
       - name: 'Upload bundles'
         uses: ./.github/actions/upload-bundles
         with:
