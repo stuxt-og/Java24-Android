@@ -103,7 +103,6 @@ jobs:
           --openjdk-target=arm-linux-gnueabihf \
           --with-boot-jdk=${{ steps.bootjdk.outputs.path }} \
           --with-jvm-variants=server \
-          --enable-dtrace=no \
           --enable-headless-only \
           --with-zlib=system \
           --with-jmod-compress=zip-1 \
@@ -127,11 +126,6 @@ jobs:
           make-target: '${{ inputs.make-target }} ${STATIC_LIBS} ${{ inputs.make-arguments }}'
           platform: armhf
           debug-suffix: '${{ matrix.suffix }}'
-
-      - name: 'List contents of build directory'
-        run: |
-          ls -R build || echo "No build dir"
-          ls -R build/linux-arm32-hardfloat || echo "No output for linux-arm32-hardfloat"
 
       - name: 'Upload bundles'
         uses: ./.github/actions/upload-bundles
