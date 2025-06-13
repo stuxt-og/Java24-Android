@@ -108,7 +108,6 @@ jobs:
           --enable-dtrace=none \
           --with-jvm-variants=server \
           --with-gtest=${{ steps.gtest.outputs.path }} \
-          --enable-debug \
           --disable-precompiled-headers \
           CC=arm-linux-gnueabihf-gcc-10 \
           CXX=arm-linux-gnueabihf-g++-10 \
