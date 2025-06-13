@@ -38,7 +38,7 @@ on:
       debug-levels:
         required: false
         type: string
-        default: '[ "debug" ]'
+        default: '[ "release" ]'
       gcc-major-version:
         required: true
         type: string
@@ -66,9 +66,9 @@ jobs:
       matrix:
         debug-level: ${{ fromJSON(inputs.debug-levels) }}
         include:
-          - debug-level: debug
-            flags: --with-debug-level=fastdebug
-            suffix: -debug
+          - debug-level: release
+            flags: --with-debug-level=release --with-native-debug-symbols=none 
+            suffix: -release
 
     steps:
       - name: 'Checkout the JDK source'
@@ -104,7 +104,9 @@ jobs:
           --with-zlib=system \
           --with-jmod-compress=zip-1 \
           --with-version-opt=${GITHUB_ACTOR}-${GITHUB_SHA} \
-          --enable-headless-only
+          --enable-headless-only \
+          --enable-dtrace=none \
+          --with-jvm-variants=server \
           --with-gtest=${{ steps.gtest.outputs.path }} \
           --enable-debug \
           --disable-precompiled-headers \
