@@ -105,7 +105,6 @@ jobs:
           --with-jvm-variants=server \
           --enable-dtrace=no \
           --enable-headless-only \
-          --with-version-pre="" \
           --with-zlib=system \
           --with-jmod-compress=zip-1 \
           --with-version-opt=${GITHUB_ACTOR}-${GITHUB_SHA} \
