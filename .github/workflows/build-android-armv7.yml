@@ -38,7 +38,7 @@ on:
       debug-levels:
         required: false
         type: string
-        default: '[ "debug" ]'
+        default: '[ "debug", "release" ]'
       gcc-major-version:
         required: true
         type: string
@@ -67,8 +67,11 @@ jobs:
         debug-level: ${{ fromJSON(inputs.debug-levels) }}
         include:
           - debug-level: debug
-            flags: --with-debug-level=fastdebug
+            flags: --with-debug-level=fastdebug --enable-debug
             suffix: -debug
+          - debug-level: release
+            flags: --with-debug-level=release
+            suffix: ''
 
     steps:
       - name: 'Checkout the JDK source'
@@ -80,17 +83,11 @@ jobs:
         with:
           platform: linux-x64
 
-      # Upgrading apt to solve libc6 installation bugs, see JDK-8260460.
       - name: 'Install toolchain and dependencies'
         run: |
-          # Install dependencies using apt-get
-          
-          echo "http://ports.ubuntu.com/ubuntu-ports/	priority:10" | sudo tee -a /etc/apt/apt-mirrors.txt
-
+          echo "http://ports.ubuntu.com/ubuntu-ports/ priority:10" | sudo tee -a /etc/apt/apt-mirrors.txt
           sudo dpkg --add-architecture armhf
-          
           sudo apt-get update
-          
           sudo apt-get install --only-upgrade apt
           sudo apt-get install gcc-10 g++-10 gcc-10-arm-linux-gnueabihf g++-10-arm-linux-gnueabihf libxrandr-dev:armhf libxtst-dev:armhf libcups2-dev:armhf libasound2-dev:armhf ${{ inputs.apt-extra-packages }} gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf libfreetype6-dev:armhf
           sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-10 100 --slave /usr/bin/g++ g++ /usr/bin/g++-10
@@ -98,30 +95,28 @@ jobs:
       - name: 'Configure'
         run: |
           bash configure \
-          --with-conf-name=linux-arm32-hardfloat \
-          --openjdk-target=arm-linux-gnueabihf \
-          --with-boot-jdk=${{ steps.bootjdk.outputs.path }} \
-          --with-zlib=system \
-          --with-jmod-compress=zip-1 \
-          --with-version-opt=${GITHUB_ACTOR}-${GITHUB_SHA} \
-          --with-gtest=${{ steps.gtest.outputs.path }} \
-          --enable-debug \
-          --enable-headless-only \
-          --disable-precompiled-headers \
-          CC=arm-linux-gnueabihf-gcc-10 \
-          CXX=arm-linux-gnueabihf-g++-10 \
-          ${{ inputs.extra-conf-options }} ${{ inputs.configure-arguments }} || ( \
-          echo "Dumping config.log:" && \
-          cat config.log && \
-          exit 1)
+            --with-conf-name=linux-arm32-hardfloat \
+            --openjdk-target=arm-linux-gnueabihf \
+            --with-boot-jdk=${{ steps.bootjdk.outputs.path }} \
+            --with-zlib=system \
+            --with-jmod-compress=zip-1 \
+            --with-version-opt=${{ matrix.debug-level }} \
+            --with-gtest=${{ steps.gtest.outputs.path }} \
+            --enable-headless-only \
+            --disable-precompiled-headers \
+            ${{ matrix.flags }} \
+            CC=arm-linux-gnueabihf-gcc-10 \
+            CXX=arm-linux-gnueabihf-g++-10 \
+            ${{ inputs.extra-conf-options }} ${{ inputs.configure-arguments }} || ( \
+              echo "Dumping config.log:" && \
+              cat config.log && \
+              exit 1)
 
       - name: 'Build'
         id: build
         uses: ./.github/actions/do-build
         env:
-          # Only build static-libs-bundles for release builds.
-          # For debug builds, building static-libs often exceeds disk space.
-          STATIC_LIBS: ${{ matrix.debug-level == 'release' && 'static-libs-bundles' }}
+          STATIC_LIBS: ${{ matrix.debug-level == 'release' && 'static-libs-bundles' || '' }}
         with:
           make-target: '${{ inputs.make-target }} ${STATIC_LIBS} ${{ inputs.make-arguments }}'
           platform: armhf
