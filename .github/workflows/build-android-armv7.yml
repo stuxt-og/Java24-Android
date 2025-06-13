@@ -104,6 +104,7 @@ jobs:
           --with-zlib=system \
           --with-jmod-compress=zip-1 \
           --with-version-opt=${GITHUB_ACTOR}-${GITHUB_SHA} \
+          --enable-headless-only
           --with-gtest=${{ steps.gtest.outputs.path }} \
           --enable-debug \
           --disable-precompiled-headers \
