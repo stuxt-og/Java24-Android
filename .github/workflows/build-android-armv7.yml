@@ -103,6 +103,9 @@ jobs:
             --with-version-opt=${{ matrix.debug-level }} \
             --with-gtest=${{ steps.gtest.outputs.path }} \
             --enable-headless-only \
+            --with-jvm-variants=server \
+            --enable-dtrace=no \
+            --with-jvm-features= \
             --disable-precompiled-headers \
             ${{ matrix.flags }} \
             CC=arm-linux-gnueabihf-gcc-10 \
