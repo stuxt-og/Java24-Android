@@ -91,17 +91,13 @@ jobs:
           sudo apt-get install --only-upgrade apt
           sudo apt-get install libxrandr-dev:armhf libxtst-dev:armhf libasound2-dev:armhf ${{ inputs.apt-extra-packages }} autoconf python3 python-is-python3 unzip zip systemtap-sdt-dev libelf-dev:armhf libfontconfig1-dev:armhf libx11-dev:armhf libxext-dev:armhf libxrandr-dev:armhf libxrender-dev:armhf libxtst-dev:armhf libxt-dev:armhf
 
-          if [[ -d "$ANDROID_NDK_HOME" ]]; then
-            echo "NDK already exists: $ANDROID_NDK_HOME"
-          else
-            echo "Downloading NDK"
+          echo "Downloading NDK"
 
-            export NDK_VERSION=r27b
+          export NDK_VERSION=r27b
 
-            wget -nc -nv -O android-ndk-$NDK_VERSION-linux-x86_64.zip "https://dl.google.com/android/repository/android-ndk-$NDK_VERSION-linux.zip"
-            unzip -q android-ndk-$NDK_VERSION-linux-x86_64.zip
-            export ANDROID_NDK_HOME=$PWD/android-ndk-$NDK_VERSION
-          fi
+          wget -nc -nv -O android-ndk-$NDK_VERSION-linux-x86_64.zip "https://dl.google.com/android/repository/android-ndk-$NDK_VERSION-linux.zip"
+          unzip -q android-ndk-$NDK_VERSION-linux-x86_64.zip
+          export ANDROID_NDK_HOME=$PWD/android-ndk-$NDK_VERSION
 
           export BUILD_FREETYPE_VERSION="2.10.0"
           export TOOLCHAIN=$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64
@@ -190,11 +186,11 @@ jobs:
           ar cru dummy_libs/libthread_db.a
 
           # fix building libjawt
-          #ln -s -f $CUPS_DIR/cups $ANDROID_INCLUDE/
+          ln -s -f $CUPS_DIR/cups $ANDROID_INCLUDE/
 
           bash configure \
             --with-conf-name=$TARGET \
-            --openjdk-target=arm-linux-gnueabihf \
+            --openjdk-target=$TARGET \
             --with-boot-jdk=${{ steps.bootjdk.outputs.path }} \
             --with-extra-cflags="$CFLAGS" \
             --with-extra-cxxflags="$CFLAGS" \
