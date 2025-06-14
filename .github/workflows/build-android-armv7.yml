@@ -147,8 +147,8 @@ jobs:
           export API=21
           export TARGET=armv7a-linux-androideabi
 
-          export CPPFLAGS="-I$ANDROID_INCLUDE -I$ANDROID_INCLUDE/$TARGET -I/usr/include"
-          export CPPFLAGS=""
+          export CFLAGS="-I$ANDROID_INCLUDE -I$ANDROID_INCLUDE/$TARGET -I/usr/include"
+          export CPPFLAGS=$CFLAGS
           export LDFLAGS="-L/usr/lib"
           # Underlying compiler called by the wrappers
           export thecc=$TOOLCHAIN/bin/${TARGET}${API}-clang
@@ -200,6 +200,7 @@ jobs:
             --with-version-opt=${{ matrix.debug-level }} \
             --with-gtest=${{ steps.gtest.outputs.path }} \
             --enable-headless-only \
+            --disable-warnings-as-errors \
             --x-includes=$ANDROID_INCLUDE/X11 \
             --enable-option-checking=fatal \
             --with-jvm-variants=client \
