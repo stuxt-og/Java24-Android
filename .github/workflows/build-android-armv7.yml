@@ -97,11 +97,11 @@ jobs:
             echo "Downloading NDK"
             wget -nc -nv -O android-ndk-$NDK_VERSION-linux-x86_64.zip "https://dl.google.com/android/repository/android-ndk-$NDK_VERSION-linux.zip"
             unzip -q android-ndk-$NDK_VERSION-linux-x86_64.zip
+            export ANDROID_NDK_HOME=$PWD/android-ndk-$NDK_VERSION
           fi
 
           export BUILD_FREETYPE_VERSION="2.10.0"
           export NDK_VERSION=r27b
-          export ANDROID_NDK_HOME=$PWD/android-ndk-$NDK_VERSION
           export TOOLCHAIN=$ANDROID_NDK_HOME/prebuilt/linux-x86_64
 
           cp devkit.info.arm ${TOOLCHAIN}
