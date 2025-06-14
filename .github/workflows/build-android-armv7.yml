@@ -97,7 +97,7 @@ jobs:
             echo "Downloading NDK"
             wget -nc -nv -O android-ndk-$NDK_VERSION-linux-x86_64.zip "https://dl.google.com/android/repository/android-ndk-$NDK_VERSION-linux.zip"
             unzip -q android-ndk-$NDK_VERSION-linux-x86_64.zip
-            export ANDROID_NDK_HOME=android-ndk-$NDK_VERSION
+            export ANDROID_NDK_HOME=./android-ndk-$NDK_VERSION
           fi
 
           export BUILD_FREETYPE_VERSION="2.10.0"
@@ -142,7 +142,7 @@ jobs:
         run: | 
           export BUILD_FREETYPE_VERSION="2.10.0"
           export NDK_VERSION=r27b
-          export ANDROID_NDK_HOME=android-ndk-$NDK_VERSION
+          export ANDROID_NDK_HOME=./android-ndk-$NDK_VERSION
           export TOOLCHAIN=$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64
           export ANDROID_INCLUDE=$TOOLCHAIN/sysroot/usr/include
 
@@ -188,7 +188,7 @@ jobs:
           ar cru dummy_libs/libthread_db.a
 
           # fix building libjawt
-          ln -s -f $CUPS_DIR/cups $ANDROID_INCLUDE/
+          #ln -s -f $CUPS_DIR/cups $ANDROID_INCLUDE/
 
           bash configure \
             --with-conf-name=$TARGET \
