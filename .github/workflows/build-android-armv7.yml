@@ -89,27 +89,134 @@ jobs:
           sudo dpkg --add-architecture armhf
           sudo apt-get update
           sudo apt-get install --only-upgrade apt
-          sudo apt-get install gcc-10 g++-10 gcc-10-arm-linux-gnueabihf g++-10-arm-linux-gnueabihf libxrandr-dev:armhf libxtst-dev:armhf libcups2-dev:armhf libasound2-dev:armhf ${{ inputs.apt-extra-packages }} gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf libfreetype6-dev:armhf
-          sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-10 100 --slave /usr/bin/g++ g++ /usr/bin/g++-10
+          sudo apt-get install libxrandr-dev:armhf libxtst-dev:armhf libasound2-dev:armhf ${{ inputs.apt-extra-packages }} autoconf python3 python-is-python3 unzip zip systemtap-sdt-dev libelf-dev:armhf libfontconfig1-dev:armhf libx11-dev:armhf libxext-dev:armhf libxrandr-dev:armhf libxrender-dev:armhf libxtst-dev:armhf libxt-dev:armhf
+
+          if [[ -d "$ANDROID_NDK_HOME" ]]; then
+            echo "NDK already exists: $ANDROID_NDK_HOME"
+          else
+            echo "Downloading NDK"
+            wget -nc -nv -O android-ndk-$NDK_VERSION-linux-x86_64.zip "https://dl.google.com/android/repository/android-ndk-$NDK_VERSION-linux.zip"
+            unzip -q android-ndk-$NDK_VERSION-linux-x86_64.zip
+          fi
+
+          export BUILD_FREETYPE_VERSION="2.10.0"
+          export NDK_VERSION=r27b
+          export ANDROID_NDK_HOME=$PWD/android-ndk-$NDK_VERSION
+          export TOOLCHAIN=$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64
+
+          cp devkit.info.arm ${TOOLCHAIN}
+
+          export ANDROID_INCLUDE=$TOOLCHAIN/sysroot/usr
+
+          export BUILD_FREETYPE_VERSION="2.10.0"
+
+          wget https://downloads.sourceforge.net/project/freetype/freetype2/$BUILD_FREETYPE_VERSION/freetype-$BUILD_FREETYPE_VERSION.tar.gz
+          tar xf freetype-$BUILD_FREETYPE_VERSION.tar.gz
+          wget https://github.com/apple/cups/releases/download/v2.2.4/cups-2.2.4-source.tar.gz
+          tar xf cups-2.2.4-source.tar.gz
+          rm cups-2.2.4-source.tar.gz freetype-$BUILD_FREETYPE_VERSION.tar.gz
+
+          cd freetype-$BUILD_FREETYPE_VERSION
+
+          echo "Building Freetype"
+
+          export PATH=$TOOLCHAIN/bin:$PATH
+          ./configure \
+            --host=$TARGET \
+            --prefix=${PWD}/build_android-${TARGET_SHORT} \
+            --without-zlib \
+            --with-png=no \
+            --with-harfbuzz=no $EXTRA_ARGS \
+            || error_code=$?
+
+            if [[ "$error_code" -ne 0 ]]; then
+              echo "\n\nCONFIGURE ERROR $error_code , config.log:"
+              cat ${PWD}/builds/unix/config.log
+              exit $error_code
+            fi
+
+            CFLAGS=-fno-rtti CXXFLAGS=-fno-rtti make -j4
+            make install
 
       - name: 'Configure'
-        run: |
+        run: | 
+          export BUILD_FREETYPE_VERSION="2.10.0"
+          export NDK_VERSION=r27b
+          export ANDROID_NDK_HOME=$PWD/android-ndk-$NDK_VERSION
+          export TOOLCHAIN=$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64
+          export ANDROID_INCLUDE=$TOOLCHAIN/sysroot/usr
+/include
+          export CPPFLAGS="-I$ANDROID_INCLUDE -I$ANDROID_INCLUDE/$TARGET" # -I/usr/include -I/usr/lib
+          export CPPFLAGS=""
+          export LDFLAGS=""
+          # Underlying compiler called by the wrappers
+          export thecc=$TOOLCHAIN/bin/${TARGET}${API}-c
+lang
+          export thecxx=$TOOLCHAIN/bin/${TARGET}${API}-clang++
+          # Configure and build.
+          export AR=$TOOLCHAIN/bin/llvm-ar
+          export AS=$TOOLCHAIN/bin/llvm-as
+          export CC=$PWD/android-wrapped-clang
+          export CXX=$PWD/android-wrapped-clang++
+          export LD=$TOOLCHAIN/bin/ld
+          export OBJCOPY=$TOOLCHAIN/bin/llvm-objcopy
+          export RANLIB=$TOOLCHAIN/bin/llvm-ranlib
+          export STRIP=$TOOLCHAIN/bin/llvm-strip
+
+          export CFLAGS+=" -DLE_STANDALONE"
+          export CFLAGS+=" -O3 -D__thumb__"
+
+          chmod +x android-wrapped-clang
+          chmod +x android-wrapped-clang++
+          ln -s -f /usr/include/X11 $ANDROID_INCLUDE/
+          ln -s -f /usr/include/fontconfig $ANDROID_INCLUDE/
+
+          export CFLAGS+=" -mllvm -polly -DANDROID -Wno-error=implicit-function-declaration -Wno-error=int-conversion"
+          export LDFLAGS+=" -L$PWD/dummy_libs -Wl,--undefined-version"
+
+          export FREETYPE_DIR=$PWD/freetype-$BUILD_FREETYPE_VERSION/build_android-$TARGET_SHORT
+          export CUPS_DIR=$PWD/cups-2.2.4
+
+          # Create dummy libraries so we won't have to remove them in OpenJDK makefiles
+          mkdir -p dummy_libs
+          ar cru dummy_libs/libpthread.a
+          ar cru dummy_libs/librt.a
+          ar cru dummy_libs/libthread_db.a
+
+          # fix building libjawt
+          ln -s -f $CUPS_DIR/cups $ANDROID_INCLUDE/
+
           bash configure \
-            --with-conf-name=linux-arm32-hardfloat \
+            --with-conf-name=armv7a-linux-androideabi \
             --openjdk-target=arm-linux-gnueabihf \
             --with-boot-jdk=${{ steps.bootjdk.outputs.path }} \
+            --with-extra-cflags="$CFLAGS" \
+            --with-extra-cxxflags="$CFLAGS" \
+            --with-extra-ldflags="$LDFLAGS" \
             --with-zlib=system \
             --with-jmod-compress=zip-1 \
             --with-version-opt=${{ matrix.debug-level }} \
             --with-gtest=${{ steps.gtest.outputs.path }} \
             --enable-headless-only \
-            --with-jvm-variants=server \
-            --enable-dtrace=no \
-            --with-jvm-features= \
+            --x-includes=$ANDROID_INCLUDE/X1
+1 \
+            --enable-option-checking=fatal \
+            --with-jvm-variants=client \
+            --with-jvm-features=-dtrace,-zero,-vm-structs,-epsilongc \
+            --with-devkit=$TOOLCHAIN \
+            --with-native-debug-symbols=external \
             --disable-precompiled-headers \
+            --with-fontconfig-include=$ANDROID_INCLUDE \
+            --x-includes=$ANDROID_INCLUDE/X11 \
+            --x-libraries=/usr/lib \
+            --with-cups-include=$CUPS_DIR \
+            --with-toolchain-type=gcc \
+            OBJCOPY=${OBJCOPY} \
+            RANLIB=${RANLIB} \
+            AR=${AR} \
+            STRIP=${STRIP} \
+            --with-cups-include=$CUPS_DIR \
             ${{ matrix.flags }} \
-            CC=arm-linux-gnueabihf-gcc-10 \
-            CXX=arm-linux-gnueabihf-g++-10 \
             ${{ inputs.extra-conf-options }} ${{ inputs.configure-arguments }} || ( \
               echo "Dumping config.log:" && \
               cat config.log && \
