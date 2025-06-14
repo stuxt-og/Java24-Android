@@ -70,7 +70,7 @@ jobs:
             flags: --enable-debug
             suffix: -debug
           - debug-level: release
-            flags: --with-debug-level=release
+            flags: --with-debug-level=release --with-native-debug-symbols=none
             suffix: ''
 
     steps:
