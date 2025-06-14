@@ -142,14 +142,14 @@ jobs:
           export NDK_VERSION=r27b
           export ANDROID_NDK_HOME=$PWD/android-ndk-$NDK_VERSION
           export TOOLCHAIN=$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64
-          export ANDROID_INCLUDE=$TOOLCHAIN/sysroot/usr/include
+          export ANDROID_INCLUDE=$TOOLCHAIN/sysroot/usr/include 
 
           export API=21
           export TARGET=armv7a-linux-androideabi
 
-          export CPPFLAGS="-I$ANDROID_INCLUDE -I$ANDROID_INCLUDE/$TARGET" # -I/usr/include -I/usr/lib
+          export CPPFLAGS="-I$ANDROID_INCLUDE -I$ANDROID_INCLUDE/$TARGET -I/usr/include"
           export CPPFLAGS=""
-          export LDFLAGS=""
+          export LDFLAGS="-L/usr/lib"
           # Underlying compiler called by the wrappers
           export thecc=$TOOLCHAIN/bin/${TARGET}${API}-clang
 
