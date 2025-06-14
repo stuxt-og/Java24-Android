@@ -89,7 +89,7 @@ jobs:
           sudo dpkg --add-architecture armhf
           sudo apt-get update
           sudo apt-get install --only-upgrade apt
-          sudo apt-get install libxrandr-dev:armhf libxtst-dev:armhf libasound2-dev:armhf ${{ inputs.apt-extra-packages }} autoconf python3 python-is-python3 unzip zip systemtap-sdt-dev libelf-dev:armhf libfontconfig1-dev:armhf libx11-dev:armhf libxext-dev:armhf libxrandr-dev:armhf libxrender-dev:armhf libxtst-dev:armhf libxt-dev:armhf
+          sudo apt-get install libxrandr-dev:armhf libxtst-dev:armhf libasound2-dev:armhf ${{ inputs.apt-extra-packages }} autoconf python3 python-is-python3 unzip zip systemtap-sdt-dev libelf-dev:armhf libfontconfig1-dev:armhf libx11-dev:armhf libxext-dev:armhf libxrandr-dev:armhf libxrender-dev:armhf libxtst-dev:armhf libxt-dev:armhf libc6-dev:armhf
 
           echo "Downloading NDK"
 
