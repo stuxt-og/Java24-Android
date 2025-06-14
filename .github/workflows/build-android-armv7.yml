@@ -102,7 +102,7 @@ jobs:
 
           export BUILD_FREETYPE_VERSION="2.10.0"
           export NDK_VERSION=r27b
-          export TOOLCHAIN=$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr
+          export TOOLCHAIN=$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64
 
           cp devkit.info.arm ${TOOLCHAIN}
 
@@ -143,7 +143,7 @@ jobs:
           export BUILD_FREETYPE_VERSION="2.10.0"
           export NDK_VERSION=r27b
           export ANDROID_NDK_HOME=$PWD/android-ndk-$NDK_VERSION
-          export TOOLCHAIN=$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr
+          export TOOLCHAIN=$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64
           export ANDROID_INCLUDE=$TOOLCHAIN/sysroot/usr/include
 
           export API=21
