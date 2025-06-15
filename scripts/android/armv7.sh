@@ -45,13 +45,13 @@ sudo ln -s -f $CUPS_DIR/cups $ANDROID_INCLUDE/
 bash configure \
 	--with-conf-name=$TARGET \
 	--openjdk-target=$TARGET \
-	--with-boot-jdk= \
+	--with-boot-jdk=$1 \
 	--with-extra-cflags="$CFLAGS" \
 	--with-extra-cxxflags="$CXXFLAGS" \
 	--with-extra-ldflags="$LDFLAGS" \
 	--with-zlib=system \
 	--with-jmod-compress=zip-1 \
-	--with-version-opt=$1 \
+	--with-version-opt=$2 \
 	--with-gtest= \
 	--enable-headless-only \
 	--disable-warnings-as-errors \

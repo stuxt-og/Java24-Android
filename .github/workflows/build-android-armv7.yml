@@ -86,11 +86,11 @@ jobs:
       - name: 'Install toolchain and dependencies'
         run: |
           chmod +x scripts/**
-          sh scripts/android/create_sysroot.sh armhf
+          bash scripts/android/create_sysroot.sh armhf
 
       - name: 'Configure'
         run: | 
-          bash scripts/android/armv7.sh ${{ matrix.debug-level }}
+          bash scripts/android/armv7.sh ${{ steps.bootjdk.outputs.path }} ${{ matrix.debug-level }}
 
       - name: 'Build'
         id: build
