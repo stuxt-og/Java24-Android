@@ -1,12 +1,18 @@
 #!/usr/bin/bash
 source scripts/android/setup_env.sh
 
+sudo apt install autoconf python3 python-is-python3 unzip zip systemtap-sdt-dev
+
 echo "http://ports.ubuntu.com/ubuntu-ports/" | sudo tee -a /etc/apt/apt-mirrors.txt
 
 sudo dpkg --add-architecture $1
 
 mkdir debtemp
 cd debtemp
+
+sudo apt update
+
+sudo apt-get install --only-upgrade apt
 
 sudo apt download libxrandr-dev:$1 libxtst-dev:$1 libasound2-dev:$1 autoconf python3 python-is-python3 unzip zip systemtap-sdt-dev libelf-dev:$1 libfontconfig1-dev:$1 libx11-dev:$1 libxext-dev:$1 libxrandr-dev:$1 libxrender-dev:$1 libxtst-dev:$1 libxt-dev:$1 libcups2:$1
 
