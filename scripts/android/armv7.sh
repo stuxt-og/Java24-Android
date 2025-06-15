@@ -8,11 +8,6 @@ export CFLAGS="-I$ANDROID_INCLUDE -I$ANDROID_INCLUDE/$TARGET -mllvm -polly -DAND
 export CPPFLAGS=$CFLAGS
 export LDFLAGS="--sysroot=$SYSROOT -L$SYSROOT/usr/lib -L$PWD/dummy_libs -Wl,--undefined-version"
 
-# Underlying compiler called by the wrappers
-export thecc=$TOOLCHAIN/bin/armv7a-linux-androideabi21-clang
-
-export thecxx=$TOOLCHAIN/bin/armv7a-linux-androideabi21-clang++
-
 # Configure and build.
 export AR=$TOOLCHAIN/bin/llvm-ar
 export AS=$TOOLCHAIN/bin/llvm-as
