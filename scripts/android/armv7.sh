@@ -52,7 +52,7 @@ bash configure \
 	--with-fontconfig-include=$ANDROID_INCLUDE \
 	--x-libraries=$SYSROOT/usr/lib \
 	--with-cups-include=$ANDROID_INCLUDE \
-	--with-toolchain-type=clang \
+	--with-toolchain-type=gcc \
 	--with-tools-dir=$TOOLCHAIN/bin \
 	OBJCOPY=${OBJCOPY} \
 	RANLIB=${RANLIB} \
