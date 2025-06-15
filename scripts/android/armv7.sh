@@ -1,5 +1,7 @@
 #!/usr/bin/bash
 
+source scripts/android/setup_env.sh
+
 export TARGET=armv7a-linux-androideabi
 
 export CFLAGS="-I$ANDROID_INCLUDE -I$ANDROID_INCLUDE/$TARGET -mllvm -polly -DANDROID -Wno-error=implicit-function-declaration -Wno-error=int-conversion -DLE_STANDALONE -O3 -D__thumb__"
