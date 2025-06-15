@@ -9,15 +9,6 @@ export CPPFLAGS=$CFLAGS
 export LDFLAGS="--sysroot=$SYSROOT -L$SYSROOT/usr/lib -L$PWD/dummy_libs -Wl,--undefined-version"
 
 # Configure and build.
-export AR=$TOOLCHAIN/bin/llvm-ar
-export AS=$TOOLCHAIN/bin/llvm-as
-export CC=$thecc
-export CXX=$thecxx
-export LD=$TOOLCHAIN/bin/ld
-export OBJCOPY=$TOOLCHAIN/bin/llvm-objcopy
-export RANLIB=$TOOLCHAIN/bin/llvm-ranlib
-export STRIP=$TOOLCHAIN/bin/llvm-strip
-
 ln -sf "$thecc" "$TOOLCHAIN/tbin/clang"
 ln -sf "$thecxx" "$TOOLCHAIN/tbin/clang++"
 ln -sf "$TOOLCHAIN/bin/llvm-ar" "$TOOLCHAIN/tbin/llvm-ar"
