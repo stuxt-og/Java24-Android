@@ -4,9 +4,10 @@
 export API=21
 export TARGET=armv7a-linux-androideabi
 
-export CFLAGS="-I$ANDROID_INCLUDE -I$ANDROID_INCLUDE/$TARGET"
+export CFLAGS="-I$ANDROID_INCLUDE -I$ANDROID_INCLUDE/$TARGET -mllvm -polly -DANDROID -Wno-error=implicit-function-declaration -Wno-error=int-conversion -DLE_STANDALONE -O3 -D__thumb__"
 export CPPFLAGS=$CFLAGS
-export LDFLAGS="--sysroot=$SYSROOT -L$SYSROOT/usr/lib"
+export LDFLAGS="--sysroot=$SYSROOT -L$SYSROOT/usr/lib -L$PWD/dummy_libs -Wl,--undefined-veirsion"
+
 # Underlying compiler called by the wrappers
 export thecc=$TOOLCHAIN/bin/${TARGET}${API}-clang
 
@@ -22,16 +23,10 @@ export OBJCOPY=$TOOLCHAIN/bin/llvm-objcopy
 export RANLIB=$TOOLCHAIN/bin/llvm-ranlib
 export STRIP=$TOOLCHAIN/bin/llvm-strip
 
-export CFLAGS+=" -DLE_STANDALONE"
-export CFLAGS+=" -O3 -D__thumb__"
-
 chmod +x android-wrapped-clang
 chmod +x android-wrapped-clang++
 ln -s -f /usr/include/X11 $ANDROID_INCLUDE/
 ln -s -f /usr/include/fontconfig $ANDROID_INCLUDE/
-
-export CFLAGS+=" -mllvm -polly -DANDROID -Wno-error=implicit-function-declaration -Wno-error=int-conversion"
-export LDFLAGS+=" -L$PWD/dummy_libs -Wl,--undefined-version"
 
 export FREETYPE_DIR=$PWD/freetype-$BUILD_FREETYPE_VERSION/build_android-arm
 export CUPS_DIR=cups-2.2.4
