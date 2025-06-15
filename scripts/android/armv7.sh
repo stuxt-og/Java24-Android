@@ -38,7 +38,7 @@ ar cru dummy_libs/librt.a
 ar cru dummy_libs/libthread_db.a
 
 # fix building libjawt
-ln -s -f $CUPS_DIR/cups $ANDROID_INCLUDE/
+sudo ln -s -f $CUPS_DIR/cups $ANDROID_INCLUDE/
 
 bash configure \
 	--with-conf-name=$TARGET \

@@ -8,7 +8,7 @@ sudo dpkg --add-architecture $1
 mkdir debtemp
 cd debtemp
 
-sudo apt download libxrandr-dev:$1 libxtst-dev:$1 libasound2-dev:$1 autoconf python3 python-is-python3 unzip zip systemtap-sdt-dev libelf-dev:$1 libfontconfig1-dev:$1 libx11-dev:$1 libxext-dev:$1 libxrandr-dev:$1 libxrender-dev:$1 libxtst-dev:$1 libxt-dev:$1
+sudo apt download libxrandr-dev:$1 libxtst-dev:$1 libasound2-dev:$1 autoconf python3 python-is-python3 unzip zip systemtap-sdt-dev libelf-dev:$1 libfontconfig1-dev:$1 libx11-dev:$1 libxext-dev:$1 libxrandr-dev:$1 libxrender-dev:$1 libxtst-dev:$1 libxt-dev:$1 libcups2:$1
 
 cd ..
 
@@ -35,8 +35,6 @@ export BUILD_FREETYPE_VERSION="2.10.0"
 
 wget https://downloads.sourceforge.net/project/freetype/freetype2/$BUILD_FREETYPE_VERSION/freetype-$BUILD_FREETYPE_VERSION.tar.gz
 tar xf freetype-$BUILD_FREETYPE_VERSION.tar.gz
-wget https://github.com/apple/cups/releases/download/v2.2.4/cups-2.2.4-source.tar.gz
-tar xf cups-2.2.4-source.tar.gz
 rm cups-2.2.4-source.tar.gz freetype-$BUILD_FREETYPE_VERSION.tar.gz
 
 cd freetype-$BUILD_FREETYPE_VERSION
