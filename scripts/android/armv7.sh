@@ -18,6 +18,15 @@ export OBJCOPY=$TOOLCHAIN/bin/llvm-objcopy
 export RANLIB=$TOOLCHAIN/bin/llvm-ranlib
 export STRIP=$TOOLCHAIN/bin/llvm-strip
 
+cp $AR $TOOLCHAIN/tbin
+cp $AS $TOOLCHAIN/tbin
+cp $CC $TOOLCHAIN/tbin
+cp $CXX $TOOLCHAIN/tbin
+cp $LD $TOOLCHAIN/tbin
+cp $OBJCOPY $TOOLCHAIN/tbin
+cp $RANLIB $TOOLCHAIN/tbin
+cp $STRIP $TOOLCHAIN/tbin
+
 export ANDROID_INCLUDE=$SYSROOT/usr/include
 
 chmod +x android-wrapped-clang
@@ -52,8 +61,8 @@ bash configure \
 	--with-fontconfig-include=$ANDROID_INCLUDE \
 	--x-libraries=$SYSROOT/usr/lib \
 	--with-cups-include=$ANDROID_INCLUDE \
-	--with-toolchain-type=gcc \
-	--with-tools-dir=$TOOLCHAIN/bin \
+	--with-toolchain-type=clang \
+	--with-tools-dir=$TOOLCHAIN/tbin \
 	OBJCOPY=${OBJCOPY} \
 	RANLIB=${RANLIB} \
 	AR=${AR} \
