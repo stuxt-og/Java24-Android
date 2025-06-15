@@ -7,14 +7,13 @@ echo "http://ports.ubuntu.com/ubuntu-ports/" | sudo tee -a /etc/apt/apt-mirrors.
 
 sudo dpkg --add-architecture $1
 
-mkdir debtemp
 cd debtemp
 
 sudo apt update
 
 sudo apt-get install --only-upgrade apt
 
-apt download libxrandr-dev:$1 libxtst-dev:$1 libasound2-dev:$1 libelf-dev:$1 libfontconfig-dev:$1 libx11-dev:$1 libxext-dev:$1 libxrandr-dev:$1 libxrender-dev:$1 libxtst-dev:$1 libxt-dev:$1 libcups2-dev:$1 x11proto-dev x11proto-core-dev xorgproto-dev libxi-dev
+apt download libxrandr-dev:$1 libxtst-dev:$1 libasound2-dev:$1 libelf-dev:$1 libfontconfig-dev:$1 libx11-dev:$1 libxext-dev:$1 libxrandr-dev:$1 libxrender-dev:$1 libxtst-dev:$1 libxt-dev:$1 libcups2-dev:$1 x11proto-dev x11proto-core-dev libxi-dev
 
 cd ..
 
@@ -37,6 +36,9 @@ for file in "debtemp"/*; do
 		ls
   fi
 done
+
+rm -rf debtemp
+
 ls $SYSROOT/usr/include	
 cp devkit.info.arm $TOOLCHAIN
 
