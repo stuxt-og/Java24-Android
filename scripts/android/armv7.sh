@@ -11,6 +11,8 @@ export LDFLAGS="--sysroot=$SYSROOT -L$SYSROOT/usr/lib -L$PWD/dummy_libs -Wl,--un
 # Underlying compiler called by the wrappers
 export thecc=$TOOLCHAIN/bin/armv7a-linux-androideabi21-clang
 
+ls $thecc
+
 export thecxx=$TOOLCHAIN/bin/armv7a-linux-androideabi21-clang++
 
 # Configure and build.
