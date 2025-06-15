@@ -25,22 +25,16 @@ export OBJCOPY=$TOOLCHAIN/bin/llvm-objcopy
 export RANLIB=$TOOLCHAIN/bin/llvm-ranlib
 export STRIP=$TOOLCHAIN/bin/llvm-strip
 
+export ANDROID_INCLUDE=$SYSROOT/usr/include
+
 chmod +x android-wrapped-clang
 chmod +x android-wrapped-clang++
-ln -s -f /usr/include/X11 $ANDROID_INCLUDE/
-ln -s -f /usr/include/fontconfig $ANDROID_INCLUDE/
-
-export FREETYPE_DIR=$PWD/freetype-$BUILD_FREETYPE_VERSION/build_android-arm
-export CUPS_DIR=cups-2.2.4
 
 # Create dummy libraries so we won't have to remove them in OpenJDK makefiles
 mkdir -p dummy_libs
 ar cru dummy_libs/libpthread.a
 ar cru dummy_libs/librt.a
 ar cru dummy_libs/libthread_db.a
-
-# fix building libjawt
-sudo ln -s -f $CUPS_DIR/cups $ANDROID_INCLUDE/
 
 bash configure \
 	--with-conf-name=$TARGET \
@@ -63,9 +57,8 @@ bash configure \
 	--with-native-debug-symbols=external \
 	--disable-precompiled-headers \
 	--with-fontconfig-include=$ANDROID_INCLUDE \
-	--x-includes=$ANDROID_INCLUDE/X11 \
-	--x-libraries=/usr/lib \
-	--with-cups-include=$CUPS_DIR \
+	--x-libraries=$SYSROOT/usr/lib \
+	--with-cups-include=$ANDROID_INCLUDE \
 	--with-toolchain-type=gcc \
 	OBJCOPY=${OBJCOPY} \
 	RANLIB=${RANLIB} \
