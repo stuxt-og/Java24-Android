@@ -16,8 +16,6 @@ sudo apt-get install --only-upgrade apt
 
 apt download libxrandr-dev:$1 libxtst-dev:$1 libasound2-dev:$1 libelf-dev:$1 libfontconfig1-dev:$1 libx11-dev:$1 libxext-dev:$1 libxrandr-dev:$1 libxrender-dev:$1 libxtst-dev:$1 libxt-dev:$1 libcups2-dev:$1
 
-ls
-
 cd ..
 
 echo "Downloading NDK"
@@ -38,7 +36,7 @@ for file in "debtemp"/*; do
 		dpkg-deb -x $file $SYSROOT
   fi
 done
-
+ls $SYSROOT
 cp devkit.info.arm $TOOLCHAIN
 
 export BUILD_FREETYPE_VERSION="2.10.0"
