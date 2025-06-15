@@ -14,7 +14,7 @@ sudo apt update
 
 sudo apt-get install --only-upgrade apt
 
-apt download libxrandr-dev:$1 libxtst-dev:$1 libasound2-dev:$1 libelf-dev:$1 libfontconfig-dev:$1 libx11-dev:$1 libxext-dev:$1 libxrandr-dev:$1 libxrender-dev:$1 libxtst-dev:$1 libxt-dev:$1 libcups2-dev:$1 x11proto-dev x11proto-core-dev xorgproto-dev
+apt download libxrandr-dev:$1 libxtst-dev:$1 libasound2-dev:$1 libelf-dev:$1 libfontconfig-dev:$1 libx11-dev:$1 libxext-dev:$1 libxrandr-dev:$1 libxrender-dev:$1 libxtst-dev:$1 libxt-dev:$1 libcups2-dev:$1 x11proto-dev x11proto-core-dev xorgproto-dev libxi-dev
 
 cd ..
 
