@@ -47,7 +47,7 @@ bash configure \
 	--with-gtest= \
 	--enable-headless-only \
 	--disable-warnings-as-errors \
-	--x-includes=$ANDROID_INCLUDE/X11 \
+	--x-includes=$ANDROID_INCLUDE \
 	--enable-option-checking=fatal \
 	--with-jvm-variants=client \
 	--with-jvm-features=-dtrace,-zero,-vm-structs,-epsilongc \
