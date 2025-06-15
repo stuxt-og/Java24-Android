@@ -1,0 +1,62 @@
+#!/usr/bin/sh
+bash setup_env.sh
+
+echo "http://ports.ubuntu.com/ubuntu-ports/" | sudo tee -a /etc/apt/apt-mirrors.txt
+
+sudo dpkg --add-architecture $1
+
+mkdir debtemp
+cd debtemp
+
+sudo apt download libxrandr-dev:$1 libxtst-dev:$1 libasound2-dev:$1 autoconf python3 python-is-python3 unzip zip systemtap-sdt-dev libelf-dev:$1 libfontconfig1-dev:$1 libx11-dev:$1 libxext-dev:$1 libxrandr-dev:$1 libxrender-dev:$1 libxtst-dev:$1 libxt-dev:$1
+
+cd ..
+
+echo "Downloading NDK"
+
+export NDK_VERSION=r27b
+
+wget -nc -nv -O android-ndk-$NDK_VERSION-linux-x86_64.zip "https://dl.google.com/android/repository/android-ndk-$NDK_VERSION-linux.zip"
+unzip -q android-ndk-$NDK_VERSION-linux-x86_64.zip android-ndk
+
+DIR="${1:-.}"
+
+# Loop through all packages
+
+for file in "$DIR"/*; do
+  if [ -f "$file" ]; then
+		dpkg-deb -x $file $SYSROOT
+  fi
+done
+
+cp devkit.info.arm $TOOLCHAIN
+
+export BUILD_FREETYPE_VERSION="2.10.0"
+
+wget https://downloads.sourceforge.net/project/freetype/freetype2/$BUILD_FREETYPE_VERSION/freetype-$BUILD_FREETYPE_VERSION.tar.gz
+tar xf freetype-$BUILD_FREETYPE_VERSION.tar.gz
+wget https://github.com/apple/cups/releases/download/v2.2.4/cups-2.2.4-source.tar.gz
+tar xf cups-2.2.4-source.tar.gz
+rm cups-2.2.4-source.tar.gz freetype-$BUILD_FREETYPE_VERSION.tar.gz
+
+cd freetype-$BUILD_FREETYPE_VERSION
+
+echo "Building Freetype"
+
+export PATH=$TOOLCHAIN/bin:$PATH
+./configure \
+--host=$TARGET \
+--prefix=$TOOLCHAIN/bin \
+--without-zlib \
+--with-png=no \
+--with-harfbuzz=no $EXTRA_ARGS \
+|| error_code=$?
+
+if [[ "$error_code" -ne 0 ]]; then
+    echo "\n\nCONFIGURE ERROR $error_code , config.log:"
+    cat ${PWD}/builds/unix/config.log
+    exit $error_code
+fi
+
+CFLAGS=-fno-rtti CXXFLAGS=-fno-rtti make -j$(nproc)
+make install
