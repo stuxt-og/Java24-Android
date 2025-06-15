@@ -36,14 +36,14 @@ for file in "debtemp"/*; do
 		dpkg-deb -x $file $SYSROOT
   fi
 done
-ls $SYSROOT
+ls $SYSROOT/usr
 cp devkit.info.arm $TOOLCHAIN
 
 export BUILD_FREETYPE_VERSION="2.10.0"
 
 wget https://downloads.sourceforge.net/project/freetype/freetype2/$BUILD_FREETYPE_VERSION/freetype-$BUILD_FREETYPE_VERSION.tar.gz
 tar xf freetype-$BUILD_FREETYPE_VERSION.tar.gz
-rm cups-2.2.4-source.tar.gz freetype-$BUILD_FREETYPE_VERSION.tar.gz
+rm freetype-$BUILD_FREETYPE_VERSION.tar.gz
 
 cd freetype-$BUILD_FREETYPE_VERSION
 
