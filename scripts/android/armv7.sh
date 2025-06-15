@@ -6,12 +6,10 @@ export TARGET=armv7a-linux-androideabi
 
 export CFLAGS="-I$ANDROID_INCLUDE -I$ANDROID_INCLUDE/$TARGET -mllvm -polly -DANDROID -Wno-error=implicit-function-declaration -Wno-error=int-conversion -DLE_STANDALONE -O3 -D__thumb__"
 export CPPFLAGS=$CFLAGS
-export LDFLAGS="--sysroot=$SYSROOT -L$SYSROOT/usr/lib -L$PWD/dummy_libs -Wl,--undefined-veirsion"
+export LDFLAGS="--sysroot=$SYSROOT -L$SYSROOT/usr/lib -L$PWD/dummy_libs -Wl,--undefined-version"
 
 # Underlying compiler called by the wrappers
 export thecc=$TOOLCHAIN/bin/armv7a-linux-androideabi21-clang
-
-ls $thecc
 
 export thecxx=$TOOLCHAIN/bin/armv7a-linux-androideabi21-clang++
 
