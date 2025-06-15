@@ -36,7 +36,7 @@ for file in "debtemp"/*; do
 		dpkg-deb -x $file $SYSROOT
   fi
 done
-ls $SYSROOT/usr
+ls $SYSROOT/usr/include
 cp devkit.info.arm $TOOLCHAIN
 
 export BUILD_FREETYPE_VERSION="2.10.0"
