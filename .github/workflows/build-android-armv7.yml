@@ -90,7 +90,7 @@ jobs:
 
       - name: 'Configure'
         run: | 
-          bash scripts/android/armv7.sh ${{ matrix.debug-level }} ${{ steps.bootjdk.output.path }} ${{ steps.gtest.outputs.path }}
+          bash scripts/android/armv7.sh ${{ matrix.debug-level }}
 
       - name: 'Build'
         id: build
