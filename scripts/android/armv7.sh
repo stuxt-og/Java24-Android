@@ -18,19 +18,16 @@ export OBJCOPY=$TOOLCHAIN/bin/llvm-objcopy
 export RANLIB=$TOOLCHAIN/bin/llvm-ranlib
 export STRIP=$TOOLCHAIN/bin/llvm-strip
 
-cp $AR $TOOLCHAIN/tbin
-cp $AS $TOOLCHAIN/tbin
-cp $CC $TOOLCHAIN/tbin
-cp $CXX $TOOLCHAIN/tbin
-cp $LD $TOOLCHAIN/tbin
-cp $OBJCOPY $TOOLCHAIN/tbin
-cp $RANLIB $TOOLCHAIN/tbin
-cp $STRIP $TOOLCHAIN/tbin
+ln -sf "$thecc" "$TOOLCHAIN/tbin/clang"
+ln -sf "$thecxx" "$TOOLCHAIN/tbin/clang++"
+ln -sf "$TOOLCHAIN/bin/llvm-ar" "$TOOLCHAIN/tbin/llvm-ar"
+ln -sf "$TOOLCHAIN/bin/llvm-as" "$TOOLCHAIN/tbin/llvm-as"
+ln -sf "$TOOLCHAIN/bin/ld" "$TOOLCHAIN/tbin/ld"
+ln -sf "$TOOLCHAIN/bin/objcopy" "$TOOLCHAIN/tbin/objcopy"
+ln -sf "$TOOLCHAIN/bin/ranlib" "$TOOLCHAIN/tbin/ranlib"
+ln -sf "$TOOLCHAIN/bin/strip" "$TOOLCHAIN/tbin/strip"
 
 export ANDROID_INCLUDE=$SYSROOT/usr/include
-
-chmod +x android-wrapped-clang
-chmod +x android-wrapped-clang++
 
 # Create dummy libraries so we won't have to remove them in OpenJDK makefiles
 mkdir -p dummy_libs
@@ -63,10 +60,6 @@ bash configure \
 	--with-cups-include=$ANDROID_INCLUDE \
 	--with-toolchain-type=clang \
 	--with-tools-dir=$TOOLCHAIN/tbin \
-	OBJCOPY=${OBJCOPY} \
-	RANLIB=${RANLIB} \
-	AR=${AR} \
-	STRIP=${STRIP} \
 	--with-cups-include=$CUPS_DIR || ( \
 	echo "Dumping config.log:" && \
 	cat config.log && \
