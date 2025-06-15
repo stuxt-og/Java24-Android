@@ -19,6 +19,8 @@ export NDK_VERSION=r27b
 wget -nc -nv -O android-ndk-$NDK_VERSION-linux-x86_64.zip "https://dl.google.com/android/repository/android-ndk-$NDK_VERSION-linux.zip"
 unzip -q android-ndk-$NDK_VERSION-linux-x86_64.zip android-ndk
 
+echo $PWD/android-ndk
+
 DIR="${1:-.}"
 
 # Loop through all packages
