@@ -1,5 +1,5 @@
 #!/usr/bin/bash
-. ./setup_env.sh
+. scripts/android/setup_env.sh
 
 echo "http://ports.ubuntu.com/ubuntu-ports/" | sudo tee -a /etc/apt/apt-mirrors.txt
 

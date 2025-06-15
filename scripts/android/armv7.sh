@@ -1,5 +1,5 @@
 #!/usr/bin/bash
-. ./setup_env.sh
+. scripts/android/setup_env.sh
 
 export API=21
 export TARGET=armv7a-linux-androideabi
