@@ -53,6 +53,7 @@ bash configure \
 	--x-libraries=$SYSROOT/usr/lib \
 	--with-cups-include=$ANDROID_INCLUDE \
 	--with-toolchain-type=clang \
+	--with-tools-dir=$TOOLCHAIN/bin \
 	OBJCOPY=${OBJCOPY} \
 	RANLIB=${RANLIB} \
 	AR=${AR} \
