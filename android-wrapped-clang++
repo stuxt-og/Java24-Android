@@ -1,5 +1,5 @@
 #!/bin/bash
-source scripts/android/setup_env.sh
+source $GITHUB_WORKSPACE/scripts/android/setup_env.sh
 
 if [ "$1" = "--version" ]; then
   echo "${TARGET}-g++ (GCC) 10.0 20140827 (prerelease)"
