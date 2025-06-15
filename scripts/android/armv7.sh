@@ -11,8 +11,8 @@ export LDFLAGS="--sysroot=$SYSROOT -L$SYSROOT/usr/lib -L$PWD/dummy_libs -Wl,--un
 # Configure and build.
 export AR=$TOOLCHAIN/bin/llvm-ar
 export AS=$TOOLCHAIN/bin/llvm-as
-export CC=$PWD/android-wrapped-clang
-export CXX=$PWD/android-wrapped-clang++
+export CC=thecc
+export CXX=thecxx
 export LD=$TOOLCHAIN/bin/ld
 export OBJCOPY=$TOOLCHAIN/bin/llvm-objcopy
 export RANLIB=$TOOLCHAIN/bin/llvm-ranlib
@@ -52,7 +52,7 @@ bash configure \
 	--with-fontconfig-include=$ANDROID_INCLUDE \
 	--x-libraries=$SYSROOT/usr/lib \
 	--with-cups-include=$ANDROID_INCLUDE \
-	--with-toolchain-type=gcc \
+	--with-toolchain-type=clang \
 	OBJCOPY=${OBJCOPY} \
 	RANLIB=${RANLIB} \
 	AR=${AR} \
