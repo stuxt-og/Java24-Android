@@ -17,8 +17,8 @@ export CPPFLAGS=""
 export LDFLAGS=""
 
 # Underlying compiler called by the wrappers
-export thecc=$TOOLCHAIN/bin/${TARGET}${API}-clang
-export thecxx=$TOOLCHAIN/bin/${TARGET}${API}-clang++
+export thecc=$TOOLCHAIN/bin/armv7a-linux-androideabi21-clang
+export thecxx=$TOOLCHAIN/bin/armv7a-linux-androideabi21-clang++
 
 # Configure and build.
 export AR=$TOOLCHAIN/bin/llvm-ar
