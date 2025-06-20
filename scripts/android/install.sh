@@ -26,5 +26,5 @@ for file in debtemp/*.deb; do
 	dpkg-deb -x $file $SYSROOT
 done
 
-ls $thecc
-ls $thecxx
+ls $CC
+ls $CXX
