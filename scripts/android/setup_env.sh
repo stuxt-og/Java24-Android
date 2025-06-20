@@ -23,12 +23,11 @@ export thecxx=$TOOLCHAIN/bin/armv7a-linux-androideabi21-clang++
 # Configure and build.
 export AR=$TOOLCHAIN/bin/llvm-ar
 export AS=$TOOLCHAIN/bin/llvm-as
-export CC=clang
-export CXX=clang++
+#export CC=clang
+#export CXX=clang++
 export LD=$TOOLCHAIN/bin/ld
 export OBJCOPY=$TOOLCHAIN/bin/llvm-objcopy
 export RANLIB=$TOOLCHAIN/bin/llvm-ranlib
 export STRIP=$TOOLCHAIN/bin/llvm-strip
-export PATH="$PWD:$PATH"
 
 export JVM_VARIANTS=client
