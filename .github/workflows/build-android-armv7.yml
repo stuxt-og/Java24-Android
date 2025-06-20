@@ -64,8 +64,8 @@ jobs:
         run: |
           chmod +x scripts/**
           
-          bash scripts/android/setup_env.sh
-          bash scripts/android/armv7/setup_env.sh
+          source scripts/android/setup_env.sh
+          source scripts/android/armv7/setup_env.sh
           bash scripts/android/install.sh armhf
 
           bash scripts/android/configure.sh ${{ steps.bootjdk.outputs.path }}
