@@ -16,6 +16,8 @@ bash configure \
 	--enable-dtrace=no \
 	--with-jvm-features= \
 	--disable-precompiled-headers \
+	CC=clang \
+	CXX=clang++ \
 	|| ( \
 	echo "Dumping config.log:" && \
 	cat config.log && \
