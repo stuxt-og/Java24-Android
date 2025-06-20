@@ -1,11 +1,7 @@
 export NDK_VERSION=r27b
 
-export BUILD_FREETYPE_VERSION="2.10.0"
-
 export JVM_PLATFORM=linux
 export API=21
-
-# Runners usually ship with a recent NDK already
 
 export ANDROID_NDK_HOME=$PWD/android-ndk-r27b
 
