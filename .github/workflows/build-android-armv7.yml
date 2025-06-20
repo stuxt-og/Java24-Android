@@ -36,7 +36,6 @@ on:
         required: false
         type: string
         default: '[ "debug" ]'
-
 jobs:
   build-android-armv7:
     name: build
@@ -77,7 +76,7 @@ jobs:
         env:
           STATIC_LIBS: ${{ matrix.debug-level == 'release' && 'static-libs-bundles' || '' }}
         with:
-          make-target: '${{ inputs.make-target }} ${STATIC_LIBS}
+          make-target: '${{ inputs.make-target }} ${STATIC_LIBS}'
           platform: armhf
           debug-suffix: '${{ matrix.suffix }}'
 
