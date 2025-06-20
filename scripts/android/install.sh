@@ -22,7 +22,11 @@ wget -nc -nv -O android-ndk.zip "https://dl.google.com/android/repository/androi
 
 unzip -q android-ndk.zip
 
-cd android-ndk-r27b && pwd && cd ..
+cd $ANDROID_NDK_HOME
+
+ls
+
+cd ..
 
 for file in debtemp/*.deb; do
 	dpkg-deb -x $file $SYSROOT

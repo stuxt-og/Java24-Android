@@ -3,7 +3,7 @@ export NDK_VERSION=r27b
 export JVM_PLATFORM=linux
 export API=21
 
-export ANDROID_NDK_HOME=$PWD/android-ndk-r27b
+export ANDROID_NDK_HOME=$(pwd)/android-ndk-r27b
 
 export TOOLCHAIN=$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64
 
