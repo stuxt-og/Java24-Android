@@ -16,7 +16,12 @@ cd debtemp
 sudo apt download libxrandr-dev:$1 libxtst-dev:$1 libcups2-dev:$1 libasound2-dev:$1 libfreetype6-dev:$1
 
 cd ..
-ls $SYSROOT
+
+echo "Downloading NDK"
+wget -nc -nv -O android-ndk.zip "https://dl.google.com/android/repository/android-ndk-r27b-linux.zip"
+
+unzip -q android-ndk.zip
+
 for file in debtemp/*.deb; do
 	dpkg-deb -x $file $SYSROOT
 done
