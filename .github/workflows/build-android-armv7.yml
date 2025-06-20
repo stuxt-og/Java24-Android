@@ -48,8 +48,8 @@ jobs:
         include:
           - debug-level: debug
             suffix: -debug
-          - debug-level: release
-            suffix: ''
+          #- debug-level: release
+          #  suffix: ''
     steps:
       - name: 'Checkout the JDK source'
         uses: actions/checkout@v4
