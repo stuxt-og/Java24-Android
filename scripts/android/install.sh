@@ -6,7 +6,7 @@ echo "http://ports.ubuntu.com/ubuntu-ports/" | sudo tee -a /etc/apt/apt-mirrors.
 sudo dpkg --add-architecture $1
 
 sudo apt-get update
-echo "$file | $SYSROOT"
+
 sudo apt-get install --only-upgrade apt
 
 mkdir debtemp
@@ -22,8 +22,9 @@ wget -nc -nv -O android-ndk.zip "https://dl.google.com/android/repository/androi
 
 unzip -q android-ndk.zip
 
-ls $SYSROOT
-ls $TOOLCHAIN
+ls $ANDROID_NDK_HOME
+
+echo --
 
 for file in debtemp/*.deb; do
 	echo "$file | $SYSROOT"
