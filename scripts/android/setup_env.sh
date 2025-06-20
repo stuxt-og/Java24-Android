@@ -9,7 +9,7 @@ export TOOLCHAIN=$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64
 
 export SYSROOT=$TOOLCHAIN/sysroot
 
-export ANDROID_INCLUDE=$TOOLCHAIN/sysroot/usr/include
+export ANDROID_INCLUDE=$SYSROOT/usr/include
 
 # If I'm right it should only need the dummy libs
 export CPPFLAGS="-I$ANDROID_INCLUDE -I$ANDROID_INCLUDE/$TARGET"
