@@ -17,4 +17,6 @@ sudo apt download libxrandr-dev:$1 libxtst-dev:$1 libcups2-dev:$1 libasound2-dev
 
 cd ..
 
-dpkg-deb -x debtemp/*.deb $SYSROOT
+for file in debtemp/; do
+	dpkg-deb -x debtemp/*.deb $SYSROOT
+done
