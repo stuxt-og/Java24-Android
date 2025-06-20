@@ -3,7 +3,7 @@ export NDK_VERSION=r27b
 export JVM_PLATFORM=linux
 export API=21
 
-export ANDROID_NDK_HOME=$(pwd)/android-ndk-r27b
+export ANDROID_NDK_HOME=$PWD/android-ndk-r27b
 
 export TOOLCHAIN=$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64
 
@@ -23,8 +23,8 @@ export thecxx=$TOOLCHAIN/bin/armv7a-linux-androideabi21-clang++
 # Configure and build.
 export AR=$TOOLCHAIN/bin/llvm-ar
 export AS=$TOOLCHAIN/bin/llvm-as
-export CC=$thecc
-export CXX=$thecxx
+export CC=$PWD/scripts/android/armv7/clang
+export CXX=$PWD/scripts/android/armv7/clang++
 export LD=$TOOLCHAIN/bin/ld
 export OBJCOPY=$TOOLCHAIN/bin/llvm-objcopy
 export RANLIB=$TOOLCHAIN/bin/llvm-ranlib
