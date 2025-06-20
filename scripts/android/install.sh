@@ -16,7 +16,7 @@ cd debtemp
 sudo apt download libxrandr-dev:$1 libxtst-dev:$1 libcups2-dev:$1 libasound2-dev:$1 libfreetype6-dev:$1
 
 cd ..
-
+ls $SYSROOT
 for file in debtemp/*.deb; do
 	dpkg-deb -x $file $SYSROOT
 done
