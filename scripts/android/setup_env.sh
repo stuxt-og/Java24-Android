@@ -7,7 +7,7 @@ export API=21
 
 # Runners usually ship with a recent NDK already
 
-export ANDROID_NDK_HOME=$PWD/android-ndk
+export ANDROID_NDK_HOME=$PWD/android-ndk-r27b
 
 export TOOLCHAIN=$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64
 
