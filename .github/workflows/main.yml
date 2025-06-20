@@ -231,10 +231,6 @@ jobs:
     name: android-armv7
     needs: prepare
     uses: ./.github/workflows/build-android-armv7.yml
-    with:
-      gcc-major-version: '10'
-      configure-arguments: ${{ github.event.inputs.configure-arguments }}
-      make-arguments: ${{ github.event.inputs.make-arguments }}
     if: needs.prepare.outputs.android-armv7 == 'true'
 
   build-windows-x64:
