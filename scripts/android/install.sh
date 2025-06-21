@@ -75,24 +75,15 @@ bash ./configure \
   --disable-launchd \
   --disable-browsing \
   --disable-webif \
-  --disable-cgi \
   --disable-dnssd \
   --without-perl \
   --without-python \
   --without-php \
   --without-java \
-  --without-krb5 \
-  --without-pam \
-  --without-tls \
-  --without-openssl \
-  --without-gnutls \
   --with-components=minimal \
-	--disable-docs \
-	--disable-translations \
-	--disable-cups-browsed \
 	--disable-raw-printing \
 	--without-rcdir \
-	--with-toolchain-type=clang \
+	--disable-acl \
 	CC=$thecc \
 	CXX=$thecxx \
 	AR=$TOOLCHAIN/bin/llvm-ar \
