@@ -1,5 +1,6 @@
 #!/usr/bin/bash
 # $1 - arch for apt
+set -u
 
 echo "http://ports.ubuntu.com/ubuntu-ports/" | sudo tee -a /etc/apt/apt-mirrors.txt
 

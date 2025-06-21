@@ -17,8 +17,15 @@ bash configure \
 	--with-jvm-features= \
 	--disable-precompiled-headers \
 	--with-toolchain-type=clang \
+	--sysroot=$SYSROOT
 	CC=$thecc \
 	CXX=$thecxx \
+	AR=$TOOLCHAIN/bin/llvm-ar \
+	AS=$TOOLCHAIN/bin/llvm-as \
+	LD=$TOOLCHAIN/bin/ld \
+	OBJCOPY=$TOOLCHAIN/bin/llvm-objcopy \
+	RANLIB=$TOOLCHAIN/bin/llvm-ranlib \
+	STRIP=$TOOLCHAIN/bin/llvm-strip \
 	|| ( \
 	echo "Dumping config.log:" && \
 	cat config.log && \
