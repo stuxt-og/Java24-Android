@@ -44,7 +44,8 @@ export PATH=$TOOLCHAIN/bin:$PATH
     --without-zlib \
     --with-png=no \
     --with-harfbuzz=no \
-    || error_code=$?
+
+error_code=$?
 
 if [[ "$error_code" -ne 0 ]]; then
   echo "\n\nCONFIGURE ERROR $error_code, config.log:"
