@@ -11,11 +11,6 @@ export SYSROOT=$TOOLCHAIN/sysroot
 
 export ANDROID_INCLUDE=$SYSROOT/usr/include
 
-# If I'm right it should only need the dummy libs
-export CPPFLAGS="-I$ANDROID_INCLUDE -I$ANDROID_INCLUDE/$TARGET"
-export CPPFLAGS=""
-export LDFLAGS="--sysroot=$SYSROOT"
-
 export thecc=$TOOLCHAIN/bin/armv7a-linux-androideabi21-clang
 export thecxx=$TOOLCHAIN/bin/armv7a-linux-androideabi21-clang++
 

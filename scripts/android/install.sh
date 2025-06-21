@@ -66,6 +66,10 @@ rm cups-2.2.4-source.tar.gz freetype-$BUILD_FREETYPE_VERSION.tar.gz
 
 cd cups-2.2.4
 
+export CPPFLAGS="-I$ANDROID_INCLUDE -I$ANDROID_INCLUDE/$TARGET -D_GNU_SOURCE -D_POSIX_C_SOURCE=200112L"
+export CPPFLAGS=""
+export LDFLAGS="--sysroot=$SYSROOT"
+
 bash ./configure \
   --host=$TARGET \
   --prefix=$SYSROOT \
@@ -86,10 +90,6 @@ bash ./configure \
 	--disable-raw-printing \
 	--without-rcdir \
 	--disable-acl \
-	--disable-file-locking \
-	--with-extra-cflags="-I$ANDROID_INCLUDE -I$ANDROID_INCLUDE/$TARGET" \
-	--with-extra-cxxflags="" \
-	--with-extra-ldflags="--sysroot=$SYSROOT" \
 	CC=$thecc \
 	CXX=$thecxx \
 	AR=$TOOLCHAIN/bin/llvm-ar \
