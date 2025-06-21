@@ -29,9 +29,9 @@ done
 
 export BUILD_FREETYPE_VERSION="2.10.0"
 
-wget https://downloads.sourceforge.net/project/freetype/freetype2/$BUILD_FREETYPE_VERSION/freetype-$BUILD_FREETYPE_VERSION.tar.gz
+wget https://downloads.sourceforge.net/project/freetype/freetype2/$BUILD_FREETYPE_VERSION/freetype-$BUILD_FREETYPE_VERSION.tar.gz >> /dev/null
+
 tar xf freetype-$BUILD_FREETYPE_VERSION.tar.gz
-rm freetype-$BUILD_FREETYPE_VERSION.tar.gz
 
 cd freetype-$BUILD_FREETYPE_VERSION
 
@@ -58,7 +58,7 @@ make install
 
 cd ..
 
-wget https://github.com/apple/cups/releases/download/v2.2.4/cups-2.2.4-source.tar.gz
+wget https://github.com/apple/cups/releases/download/v2.2.4/cups-2.2.4-source.tar.gz >> /dev/null
 tar xf cups-2.2.4-source.tar.gz
 
 cd cups-2.2.4
@@ -91,7 +91,16 @@ bash ./configure \
 	--disable-translations \
 	--disable-cups-browsed \
 	--disable-raw-printing \
-	--without-rcdir
+	--without-rcdir \
+	--with-toolchain-type=clang \
+	CC=$thecc \
+	CXX=$thecxx \
+	AR=$TOOLCHAIN/bin/llvm-ar \
+	AS=$TOOLCHAIN/bin/llvm-as \
+	LD=$TOOLCHAIN/bin/ld \
+	OBJCOPY=$TOOLCHAIN/bin/llvm-objcopy \
+	RANLIB=$TOOLCHAIN/bin/llvm-ranlib \
+	STRIP=$TOOLCHAIN/bin/llvm-strip
 
 error_code=$?
 
