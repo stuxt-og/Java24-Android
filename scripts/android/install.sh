@@ -86,9 +86,9 @@ bash ./configure \
 	--disable-raw-printing \
 	--without-rcdir \
 	--disable-acl \
-	--with-extra-cflags="-I$ANDROID_INCLUDE -I$ANDROID_INCLUDE/$TARGET -Dlockf=fcntl_lockf"
-	--with-extra-cxxflags=""
-	--with-extra-ldflags="--sysroot=$SYSROOT"
+	--with-extra-cflags="-I$ANDROID_INCLUDE -I$ANDROID_INCLUDE/$TARGET -Dlockf=fcntl_lockf" \
+	--with-extra-cxxflags="" \
+	--with-extra-ldflags="--sysroot=$SYSROOT" \
 	CC=$thecc \
 	CXX=$thecxx \
 	AR=$TOOLCHAIN/bin/llvm-ar \
