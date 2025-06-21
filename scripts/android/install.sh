@@ -44,9 +44,6 @@ export PATH=$TOOLCHAIN/bin:$PATH
     --without-zlib \
     --with-png=no \
     --with-harfbuzz=no \
-		--with-extra-cflags="-I$ANDROID_INCLUDE -I$ANDROID_INCLUDE/$TARGET"
-		--with-extra-cxxflags=""
-		--with-extra-ldflags="--sysroot=$SYSROOT"
 		|| error_code=$?
 
 if [[ "$error_code" -ne 0 ]]; then
