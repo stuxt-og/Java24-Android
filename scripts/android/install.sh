@@ -61,9 +61,9 @@ cd ..
 wget https://github.com/apple/cups/releases/download/v2.2.4/cups-2.2.4-source.tar.gz >> /dev/null
 tar xf cups-2.2.4-source.tar.gz
 
-cd cups-2.2.4
+rm cups-2.2.4-source.tar.gz freetype-$BUILD_FREETYPE_VERSION.tar.gz
 
-make distclean
+cd cups-2.2.4
 
 bash ./configure \
   --host=$TARGET \
@@ -99,7 +99,7 @@ error_code=$?
 
 if [[ "$error_code" -ne 0 ]]; then
   echo "\n\nCONFIGURE ERROR $error_code, config.log:"
-  cat ${PWD}/builds/unix/config.log
+  cat ${PWD}/config.log
   exit $error_code
 fi
 
@@ -107,5 +107,3 @@ CFLAGS=-fno-rtti CXXFLAGS=-fno-rtti make -j$(nproc)
 make install
 
 cd ..
-
-rm cups-2.2.4-source.tar.gz freetype-$BUILD_FREETYPE_VERSION.tar.gz
