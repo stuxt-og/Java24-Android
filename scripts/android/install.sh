@@ -14,7 +14,7 @@ mkdir debtemp
 
 cd debtemp
 
-apt download libxrandr-dev:$1 libxtst-dev:$1 libcups2-dev:$1 libasound2-dev:$1 libfontconfig-dev:$1
+apt download libxrandr-dev:$1 libxtst-dev:$1 libasound2-dev:$1 libfontconfig-dev:$1
 
 cd ..
 
@@ -57,3 +57,53 @@ CFLAGS=-fno-rtti CXXFLAGS=-fno-rtti make -j$(nproc)
 make install
 
 cd ..
+
+wget https://github.com/apple/cups/releases/download/v2.2.4/cups-2.2.4-source.tar.gz
+tar xf cups-2.2.4-source.tar.gz
+
+cd cups-2.2.4
+
+bash ./configure \
+  --host=$TARGET \
+  --prefix=$SYSROOT \
+  --disable-shared \
+  --enable-static \
+  --disable-gssapi \
+  --disable-dbus \
+  --disable-avahi \
+  --disable-systemd \
+  --disable-launchd \
+  --disable-browsing \
+  --disable-webif \
+  --disable-cgi \
+  --disable-dnssd \
+  --without-perl \
+  --without-python \
+  --without-php \
+  --without-java \
+  --without-krb5 \
+  --without-pam \
+  --without-tls \
+  --without-openssl \
+  --without-gnutls \
+  --with-components=minimal \
+	--disable-docs \
+	--disable-translations \
+	--disable-cups-browsed \
+	--disable-raw-printing \
+	--without-rcdir
+
+error_code=$?
+
+if [[ "$error_code" -ne 0 ]]; then
+  echo "\n\nCONFIGURE ERROR $error_code, config.log:"
+  cat ${PWD}/builds/unix/config.log
+  exit $error_code
+fi
+
+CFLAGS=-fno-rtti CXXFLAGS=-fno-rtti make -j$(nproc)
+make install
+
+cd ..
+
+rm cups-2.2.4-source.tar.gz freetype-$BUILD_FREETYPE_VERSION.tar.gz

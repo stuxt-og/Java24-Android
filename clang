@@ -1,6 +1,0 @@
-#!/bin/bash
-if [ "$1" = "--version" ]; then
-  echo "${TARGET}-clang (Clang) 10.0"
-else
-  exec $thecc $@
-fi
