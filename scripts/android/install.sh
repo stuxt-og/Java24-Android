@@ -63,6 +63,8 @@ tar xf cups-2.2.4-source.tar.gz
 
 cd cups-2.2.4
 
+make distclean
+
 bash ./configure \
   --host=$TARGET \
   --prefix=$SYSROOT \
