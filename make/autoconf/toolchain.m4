@@ -35,23 +35,21 @@
 m4_include([toolchain_microsoft.m4])
 
 # All valid toolchains, regardless of platform (used by help.m4)
-VALID_TOOLCHAINS_all="gcc clang andk-clang microsoft"
+VALID_TOOLCHAINS_all="gcc clang microsoft"
 
 # These toolchains are valid on different platforms
-VALID_TOOLCHAINS_linux="gcc clang andk-clang"
+VALID_TOOLCHAINS_linux="gcc clang"
 VALID_TOOLCHAINS_macosx="clang"
 VALID_TOOLCHAINS_aix="clang"
 VALID_TOOLCHAINS_windows="microsoft"
 
 # Toolchain descriptions
 TOOLCHAIN_DESCRIPTION_clang="clang/LLVM"
-TOOLCHAIN_DESCRIPTION_andk-clang="clang/LLVM"
 TOOLCHAIN_DESCRIPTION_gcc="GNU Compiler Collection"
 TOOLCHAIN_DESCRIPTION_microsoft="Microsoft Visual Studio"
 
 # Minimum supported versions, empty means unspecified
 TOOLCHAIN_MINIMUM_VERSION_clang="13.0"
-TOOLCHAIN_MINIMUM_VERSION_andk-clang="13.0"
 TOOLCHAIN_MINIMUM_VERSION_gcc="10.0"
 TOOLCHAIN_MINIMUM_VERSION_microsoft="19.28.0.0" # VS2019 16.8, aka MSVC 14.28
 
@@ -333,10 +331,7 @@ AC_DEFUN([TOOLCHAIN_EXTRACT_COMPILER_VERSION],
   COMPILER=[$]$1
   COMPILER_NAME=$2
 
-	if test "$TOOLCHAIN" = andk-clang; then
-		COMPILER_VERSION_STRING="Android clang version 18.0.2"
-		COMPILER_VERSION_NUMBER=18.0.2
-	elif test  "x$TOOLCHAIN_TYPE" = xmicrosoft; then
+	if test  "x$TOOLCHAIN_TYPE" = xmicrosoft; then
     # There is no specific version flag, but all output starts with a version string.
     # First line typically looks something like:
     # Microsoft (R) 32-bit C/C++ Optimizing Compiler Version 16.00.40219.01 for 80x86
@@ -380,37 +375,8 @@ AC_DEFUN([TOOLCHAIN_EXTRACT_COMPILER_VERSION],
         $AWK -F ')' '{print [$]2}' | \
         $AWK '{print [$]1}'`
   elif test  "x$TOOLCHAIN_TYPE" = xclang; then
-    # clang --version output typically looks like
-    #    Apple clang version 15.0.0 (clang-1500.3.9.4)
-    #    Target: arm64-apple-darwin23.2.0
-    #    Thread model: posix
-    #    InstalledDir: /Library/Developer/CommandLineTools/usr/bin
-    # or
-    #    clang version 10.0.0-4ubuntu1
-    #    Target: x86_64-pc-linux-gnu
-    #    Thread model: posix
-    #    InstalledDir: /usr/bin
-    #    Target: x86_64-pc-linux-gnu
-    #    Thread model: posix
-    # or
-    #    IBM Open XL C/C++ for AIX 17.1.0 (5725-C72, 5765-J18), clang version 13.0.0
-    #    Target: powerpc-ibm-aix7.2.0.0
-    #    Thread model: posix
-    #    InstalledDir: /opt/IBM/openxlC/17.1.0/bin
-    COMPILER_VERSION_OUTPUT=`$COMPILER --version 2>&1`
-    # Check that this is likely to be clang
-    $ECHO "$COMPILER_VERSION_OUTPUT" | $GREP "clang" > /dev/null
-    if test $? -ne 0; then
-      AC_MSG_NOTICE([The $COMPILER_NAME compiler (located as $COMPILER) does not seem to be the required $TOOLCHAIN_TYPE compiler.])
-      AC_MSG_NOTICE([The result from running with --version was: "$COMPILER_VERSION_OUTPUT"])
-      AC_MSG_ERROR([A $TOOLCHAIN_TYPE compiler is required. Try setting --with-tools-dir.])
-    fi
-    # Remove "Thread model:" and further details from the version string, and
-    # collapse into a single line
-    COMPILER_VERSION_STRING=`$ECHO $COMPILER_VERSION_OUTPUT | \
-        $SED -e 's/ *Thread model: .*//'`
-    COMPILER_VERSION_NUMBER=`$ECHO $COMPILER_VERSION_OUTPUT | \
-        $SED -e 's/^.*clang version \(@<:@1-9@:>@@<:@0-9.@:>@*\).*$/\1/'`
+			COMPILER_VERSION_STRING="Android clang version 18.0.2"
+			COMPILER_VERSION_NUMBER=18.0.2
   else
       AC_MSG_ERROR([Unknown toolchain type $TOOLCHAIN_TYPE.])
   fi

@@ -16,7 +16,7 @@ bash configure \
 	--enable-dtrace=no \
 	--with-jvm-features= \
 	--disable-precompiled-headers \
-	--with-toolchain-type=andk-clang \
+	--with-toolchain-type=clang \
 	CC=$thecc \
 	CXX=$thecxx \
 	|| ( \
