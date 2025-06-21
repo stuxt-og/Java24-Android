@@ -14,7 +14,7 @@ mkdir debtemp
 
 cd debtemp
 
-apt download libxrandr-dev:$1 libxtst-dev:$1 libasound2-dev:$1 libfontconfig-dev:$1
+apt download libxrandr-dev:$1 libxtst-dev:$1 libasound2-dev:$1 libfontconfig-dev:$1 libusb-1.0-0-dev:$1 
 
 cd ..
 
