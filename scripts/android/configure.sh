@@ -17,7 +17,6 @@ bash configure \
 	--with-jvm-features= \
 	--disable-precompiled-headers \
 	--with-toolchain-type=clang \
-	--sysroot=$SYSROOT
 	CC=$thecc \
 	CXX=$thecxx \
 	AR=$TOOLCHAIN/bin/llvm-ar \
