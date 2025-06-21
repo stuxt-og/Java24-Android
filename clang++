@@ -1,11 +1,6 @@
 #!/bin/bash
 if [ "$1" = "--version" ]; then
-  echo "${TARGET}-g++ (GCC) 10.0 20140827 (prerelease)"
-  echo "Copyright (C) 2014 Free Software Foundation, Inc."
-  echo "This is free software; see the source for copying conditions.  There is NO"
-  echo "warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."
+	echo "${TARGET}-clang++ (CLANG) 10.0"
 else
-  # theargs=
-  exec $thecxx -Wno-unknown-warning-option "${@/-fno-var-tracking-assignments/}"
-  # exec $thecxx "$theargs"
+  exec $thecxx $@
 fi
