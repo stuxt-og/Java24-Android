@@ -14,7 +14,7 @@ mkdir debtemp
 
 cd debtemp
 
-apt download libxrandr-dev:$1 libxtst-dev:$1 libcups2-dev:$1 libasound2-dev:$1 libfreetype6-dev libfontconfig-dev:$1
+apt download libxrandr-dev:$1 libxtst-dev:$1 libcups2-dev:$1 libasound2-dev:$1 libfontconfig-dev:$1
 
 cd ..
 
@@ -26,3 +26,33 @@ unzip -q android-ndk.zip
 for file in debtemp/*.deb; do
 	dpkg-deb -x $file $SYSROOT
 done
+
+export BUILD_FREETYPE_VERSION="2.10.0"
+
+wget https://downloads.sourceforge.net/project/freetype/freetype2/$BUILD_FREETYPE_VERSION/freetype-$BUILD_FREETYPE_VERSION.tar.gz
+tar xf freetype-$BUILD_FREETYPE_VERSION.tar.gz
+rm freetype-$BUILD_FREETYPE_VERSION.tar.gz
+
+cd freetype-$BUILD_FREETYPE_VERSION
+
+echo "Building Freetype"
+
+export PATH=$TOOLCHAIN/bin:$PATH
+  ./configure \
+    --host=$TARGET \
+    --prefix=$SYSROOT \
+    --without-zlib \
+    --with-png=no \
+    --with-harfbuzz=no $EXTRA_ARGS \
+    || error_code=$?
+
+if [[ "$error_code" -ne 0 ]]; then
+  echo "\n\nCONFIGURE ERROR $error_code, config.log:"
+  cat ${PWD}/builds/unix/config.log
+  exit $error_code
+fi
+
+CFLAGS=-fno-rtti CXXFLAGS=-fno-rtti make -j$(nproc)
+make install
+
+cd ..
