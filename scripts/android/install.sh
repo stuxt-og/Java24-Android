@@ -86,6 +86,8 @@ bash ./configure \
 	--disable-raw-printing \
 	--without-rcdir \
 	--disable-acl \
+	--with-libusb-includes=$SYSROOT/usr/include/libusb-1.0 \
+	--with-libusb-libs=$SYSROOT/usr/lib \
 	CC=$thecc \
 	CXX=$thecxx \
 	AR=$TOOLCHAIN/bin/llvm-ar \
