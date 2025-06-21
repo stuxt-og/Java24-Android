@@ -35,21 +35,23 @@
 m4_include([toolchain_microsoft.m4])
 
 # All valid toolchains, regardless of platform (used by help.m4)
-VALID_TOOLCHAINS_all="gcc clang microsoft"
+VALID_TOOLCHAINS_all="gcc clang andk-clang microsoft"
 
 # These toolchains are valid on different platforms
-VALID_TOOLCHAINS_linux="gcc clang"
+VALID_TOOLCHAINS_linux="gcc clang andk-clang"
 VALID_TOOLCHAINS_macosx="clang"
 VALID_TOOLCHAINS_aix="clang"
 VALID_TOOLCHAINS_windows="microsoft"
 
 # Toolchain descriptions
 TOOLCHAIN_DESCRIPTION_clang="clang/LLVM"
+TOOLCHAIN_DESCRIPTION_andk-clang="clang/LLVM"
 TOOLCHAIN_DESCRIPTION_gcc="GNU Compiler Collection"
 TOOLCHAIN_DESCRIPTION_microsoft="Microsoft Visual Studio"
 
 # Minimum supported versions, empty means unspecified
 TOOLCHAIN_MINIMUM_VERSION_clang="13.0"
+TOOLCHAIN_MINIMUM_VERSION_andk-clang="13.0"
 TOOLCHAIN_MINIMUM_VERSION_gcc="10.0"
 TOOLCHAIN_MINIMUM_VERSION_microsoft="19.28.0.0" # VS2019 16.8, aka MSVC 14.28
 
