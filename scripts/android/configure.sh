@@ -17,6 +17,7 @@ bash configure \
 	--with-jvm-features= \
 	--disable-precompiled-headers \
 	--with-toolchain-type=clang \
+	--without-cups \
 	CC=$thecc \
 	CXX=$thecxx \
 	AR=$TOOLCHAIN/bin/llvm-ar \
