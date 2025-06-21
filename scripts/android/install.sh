@@ -37,6 +37,8 @@ cd freetype-$BUILD_FREETYPE_VERSION
 
 echo "Building Freetype"
 
+error_code=0
+
 export PATH=$TOOLCHAIN/bin:$PATH
   ./configure \
     --host=$TARGET \
