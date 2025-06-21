@@ -80,6 +80,17 @@ AC_DEFUN([TOOLCHAIN_PREPARE_FOR_VERSION_COMPARISONS],
   $2COMPARABLE_ACTUAL_VERSION=`$AWK -F. '{ printf("%05d%05d%05d%05d\n", [$]1, [$]2, [$]3, [$]4) }' <<< "[$]$1CC_VERSION_NUMBER"`
 ])
 
+# Define custom flag for Android NDK Clang
+AC_DEFUN([CUSTOM_SETUP_ANDK_CLANG],
+[
+  AC_ARG_WITH([andk-clang],
+    [AS_HELP_STRING([--andk-clang],
+      [Enable Android NDK Clang mode @<:@default=disabled@:>@])],
+    [ANDK_CLANG=true],
+    [ANDK_CLANG=false])
+  AC_SUBST(ANDK_CLANG)
+])
+
 # Check if the configured compiler (C and C++) is of a specific version or
 # newer. TOOLCHAIN_PREPARE_FOR_VERSION_COMPARISONS must have been called before.
 #
@@ -331,7 +342,10 @@ AC_DEFUN([TOOLCHAIN_EXTRACT_COMPILER_VERSION],
   COMPILER=[$]$1
   COMPILER_NAME=$2
 
-  if test  "x$TOOLCHAIN_TYPE" = xmicrosoft; then
+	ifeq ("$ANDK_CLANG",true); then
+		COMPILER_VERSION_STRING="Android clang version 18.0.2"
+		COMPILER_VERSION_NUMBER=18.0.2
+	elif test  "x$TOOLCHAIN_TYPE" = xmicrosoft; then
     # There is no specific version flag, but all output starts with a version string.
     # First line typically looks something like:
     # Microsoft (R) 32-bit C/C++ Optimizing Compiler Version 16.00.40219.01 for 80x86

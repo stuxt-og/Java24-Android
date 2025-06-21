@@ -17,8 +17,9 @@ bash configure \
 	--with-jvm-features= \
 	--disable-precompiled-headers \
 	--with-toolchain-type=clang \
-	CC=$PWD/clang \
-	CXX=$PWD/clang++ \
+	--andk-clang \
+	CC=$thecc \
+	CXX=$thecxx \
 	|| ( \
 	echo "Dumping config.log:" && \
 	cat config.log && \
