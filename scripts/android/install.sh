@@ -86,7 +86,8 @@ bash ./configure \
 	--disable-raw-printing \
 	--without-rcdir \
 	--disable-acl \
-	--with-extra-cflags="-I$ANDROID_INCLUDE -I$ANDROID_INCLUDE/$TARGET -Dlockf=fcntl_lockf" \
+	--disable-file-locking \
+	--with-extra-cflags="-I$ANDROID_INCLUDE -I$ANDROID_INCLUDE/$TARGET" \
 	--with-extra-cxxflags="" \
 	--with-extra-ldflags="--sysroot=$SYSROOT" \
 	CC=$thecc \
