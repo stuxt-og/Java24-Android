@@ -43,7 +43,7 @@ export PATH=$TOOLCHAIN/bin:$PATH
     --prefix=$SYSROOT \
     --without-zlib \
     --with-png=no \
-    --with-harfbuzz=no $EXTRA_ARGS \
+    --with-harfbuzz=no \
     || error_code=$?
 
 if [[ "$error_code" -ne 0 ]]; then
