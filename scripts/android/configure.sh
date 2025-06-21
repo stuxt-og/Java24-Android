@@ -10,6 +10,9 @@ bash configure \
 	--with-zlib=system \
 	--with-jmod-compress=zip-1 \
 	--with-version-opt=fastdebug \
+	--with-extra-cflags="-I$ANDROID_INCLUDE -I$ANDROID_INCLUDE/$TARGET"
+	--with-extra-cxxflags=""
+	--with-extra-ldflags="--sysroot=$SYSROOT"
 	--with-gtest= \
 	--enable-headless-only \
 	--with-jvm-variants=$JVM_VARIANTS \

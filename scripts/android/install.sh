@@ -44,8 +44,10 @@ export PATH=$TOOLCHAIN/bin:$PATH
     --without-zlib \
     --with-png=no \
     --with-harfbuzz=no \
-
-error_code=$?
+		--with-extra-cflags="-I$ANDROID_INCLUDE -I$ANDROID_INCLUDE/$TARGET"
+		--with-extra-cxxflags=""
+		--with-extra-ldflags="--sysroot=$SYSROOT"
+		|| error_code=$?
 
 if [[ "$error_code" -ne 0 ]]; then
   echo "\n\nCONFIGURE ERROR $error_code, config.log:"
@@ -85,6 +87,9 @@ bash ./configure \
 	--disable-raw-printing \
 	--without-rcdir \
 	--disable-acl \
+	--with-extra-cflags="-I$ANDROID_INCLUDE -I$ANDROID_INCLUDE/$TARGET -Dlockf=fcntl_lockf"
+	--with-extra-cxxflags=""
+	--with-extra-ldflags="--sysroot=$SYSROOT"
 	CC=$thecc \
 	CXX=$thecxx \
 	AR=$TOOLCHAIN/bin/llvm-ar \
@@ -92,9 +97,8 @@ bash ./configure \
 	LD=$TOOLCHAIN/bin/ld \
 	OBJCOPY=$TOOLCHAIN/bin/llvm-objcopy \
 	RANLIB=$TOOLCHAIN/bin/llvm-ranlib \
-	STRIP=$TOOLCHAIN/bin/llvm-strip
-
-error_code=$?
+	STRIP=$TOOLCHAIN/bin/llvm-strip \
+	|| error_code=$?
 
 if [[ "$error_code" -ne 0 ]]; then
   echo "\n\nCONFIGURE ERROR $error_code, config.log:"
